@@ -1,0 +1,24 @@
+{
+  "name": "horizon",
+  "version": "1.5.0",
+  "description": "Un bot Discord multifonctions",
+  "main": "index.js",
+  "dependencies": {
+    "discord.js": "^11.4.2",
+    "ffmpeg-binaries": "^4.0.0",
+    "gitlab": "^4.3.0",
+    "opusscript": "^0.0.6",
+    "underscore": "^1.9.1",
+    "ytdl-core": "^0.29.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "><"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@gitlab.com:minteck-projects/projects/horizon.git"
+  },
+  "author": "Minteck Projects",
+  "license": "SEE LICENSE IN LICENSE"
+}
