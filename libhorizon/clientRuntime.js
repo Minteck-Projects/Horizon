@@ -1,5 +1,6 @@
 var childProcess = require('child_process');
 var config = require('../config/config.json')
+var mode = require('../config/mode.json')
 let testMode = false
 let connected = false
 let loginfo = "nothing"
