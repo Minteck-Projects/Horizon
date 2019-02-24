@@ -58,50 +58,56 @@ if ( config.commandsSuffix.length > 1 ) {
 
 if ( config.enableVoiceChannel != false && config.enableVoiceChannel != true ) {
     confInfo = "La propriété 'enableVoiceChannel' n'est pas une valeur booléenne.";
-    confLine = 15
+    confLine = 17
     invalidConfig();
 }
 
 if ( config.enableChangeGameActivity != false && config.enableChangeGameActivity != true ) {
     confInfo = "La propriété 'enableChangeGameActivity' n'est pas une valeur booléenne.";
-    confLine = 16
+    confLine = 18
     invalidConfig();
 }
 
 if ( config.enableRawMessages != false && config.enableRawMessages != true ) {
     confInfo = "La propriété 'enableRawMessages' n'est pas une valeur booléenne.";
-    confLine = 17
+    confLine = 19
     invalidConfig();
 }
 
 if ( config.enableActionCancel != false && config.enableActionCancel != true ) {
     confInfo = "La propriété 'enableActionCancel' n'est pas une valeur booléenne.";
-    confLine = 18
+    confLine = 20
     invalidConfig();
 }
 
 if ( config.enableRestartCmd != false && config.enableRestartCmd != true ) {
     confInfo = "La propriété 'enableRestartCmd' n'est pas une valeur booléenne.";
-    confLine = 19
+    confLine = 21
     invalidConfig();
 }
 
 if ( config.enableTestMode != false && config.enableTestMode != true ) {
     confInfo = "La propriété 'enableTestMode' n'est pas une valeur booléenne.";
-    confLine = 20
+    confLine = 22
     invalidConfig();
 }
 
 if ( config.enableDebugInfo != false && config.enableDebugInfo != true ) {
     confInfo = "La propriété 'enableDebugInfo' n'est pas une valeur booléenne.";
-    confLine = 21
+    confLine = 23
     invalidConfig();
 }
 
 if ( config.enableVoiceDebugInfo != false && config.enableVoiceDebugInfo != true ) {
     confInfo = "La propriété 'enableVoiceDebugInfo' n'est pas une valeur booléenne.";
-    confLine = 22
+    confLine = 24
     invalidConfig();
 }
 
-console.log("Configuration OK : 18 propriétés chargées")
+if ( config.enableHorigame != false && config.enableHorigame != true ) {
+    confInfo = "La propriété 'enableHorigame' n'est pas une valeur booléenne.";
+    confLine = 25
+    invalidConfig();
+}
+
+console.log("Configuration OK : 20 propriétés chargées")

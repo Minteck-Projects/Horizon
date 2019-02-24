@@ -1,6 +1,6 @@
 {
 
-    "token": "InsérezLeTokenIci",
+    "token": "TokenIci",
 	
     "testMode": false,
 	"keepLogs": true,
@@ -12,7 +12,7 @@
     "commandsSuffix": "<",
 
     "logPath": "./global.log",
-	"crashRpPath": "./crashes.log",
+    "crashRpPath": "./crashes.log",
     
     "enableVoiceChannel": true,
     "enableChangeGameActivity": true,
@@ -21,6 +21,8 @@
     "enableRestartCmd": true,
     "enableTestMode": true,
     "enableDebugInfo": true,
-    "enableVoiceDebugInfo": true
-	
+    "enableVoiceDebugInfo": true,
+    "enableHorigame": true,
+
+    "pionnerRoleID": "408348879243968512"
 }

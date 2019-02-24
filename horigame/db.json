@@ -1,0 +1,68 @@
+{
+    "game": {
+        "testunit": {
+            "level": 0,
+            "xp": 10,
+            "objects": {
+                "diamonds": 1,
+                "irons": 0,
+                "golds": 3,
+                "woods": 30
+            },
+            "bonus": {
+                "xpBottle": 1,
+                "ironPack": 0,
+                "goldPack": 0,
+                "woodPack": 1
+            }
+        },
+        "294910706250285056": {
+            "level": 2,
+            "xp": 110,
+            "objects": {
+                "diamonds": 0,
+                "irons": 2,
+                "golds": 1,
+                "woods": 0
+            },
+            "bonus": {
+                "xpBottle": 0,
+                "ironPack": 0,
+                "goldPack": 0,
+                "woodPack": 0
+            }
+        },
+        "392012706279981066": {
+            "level": 0,
+            "xp": 260,
+            "objects": {
+                "diamonds": 0,
+                "irons": 1,
+                "golds": 0,
+                "woods": 0
+            },
+            "bonus": {
+                "xpBottle": 0,
+                "ironPack": 0,
+                "goldPack": 0,
+                "woodPack": 0
+            }
+        },
+        "546089497478037515": {
+            "level": 0,
+            "xp": 30,
+            "objects": {
+                "diamonds": 0,
+                "irons": 0,
+                "golds": 0,
+                "woods": 5
+            },
+            "bonus": {
+                "xpBottle": 0,
+                "ironPack": 0,
+                "goldPack": 0,
+                "woodPack": 0
+            }
+        }
+    }
+}

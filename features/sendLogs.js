@@ -11,8 +11,8 @@ const mode = require('../config/mode.json')
 module.exports = class SendLogs extends Command {
 
     static match(message) {
-        if (config.keepLogs) {
             if (message.content == config.commandsPrefix + config.commandsSuffix + 'l') {
+                if (config.keepLogs) {
                 message.delete()
                 if (message.author.username == "Minteck | ルカリオ" || message.author.username == "Horizon.Data") {
                     const reports = new Discord.Attachment(config.logPath)
@@ -30,19 +30,15 @@ module.exports = class SendLogs extends Command {
                         if (message.guild) { loginfo = "Rejet d'accès à l'utilisateur @" + message.author.username + "#" + message.author.tag + " (" + message.author.id + ") depuis le serveur " + message.guild.name + " (#" + message.channel.name + ")" + " | " + message.content } else { loginfo = "Rejet d'accès à l'utilisateur @" + message.author.tag + " (" + message.author.id + ") via messages privés | " + message.content }
                         showLog();
                     }
+            }else{
+                if (message.author.username == "Minteck | ルカリオ" || message.author.username == "Horizon.Data") {
+                message.delete()
+                message.author.send("Désolé, mais mon administrateur m'a interdit de sauvegarder une copie des fichiers journaux...")
+                loginfo = "Rejet d'envoi des fichiers jounaux"
+                showLog();
             }
 
-}else{
-    if (message.author.username == "Minteck | ルカリオ" || message.author.username == "Horizon.Data") {
-    message.delete()
-    message.author.send("Désolé, mais mon administrateur m'a interdit de sauvegarder une copie des fichiers journaux...")
-    loginfo = "Rejet d'envoi des fichiers jounaux"
-    showLog();
-}else{
-    if (message.guild) { loginfo = "Rejet d'accès à l'utilisateur @" + message.author.username + "#" + message.author.tag + " (" + message.author.id + ") depuis le serveur " + message.guild.name + " (#" + message.channel.name + ")" + " | " + message.content } else { loginfo = "Rejet d'accès à l'utilisateur @" + message.author.tag + " (" + message.author.id + ") via messages privés | " + message.content }
-    showLog();
-}
-}}}
+}}}}
 
 function showLog() {
     if (config.keepLogs == true) {

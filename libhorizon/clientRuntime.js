@@ -1,9 +1,5 @@
 var childProcess = require('child_process');
-<<<<<<< HEAD
-var config = require('../config/config.json');
-=======
 var config = require('../config/config.json')
->>>>>>> 6b8c6cebe8de81aa8cf3ea8afd5ea3c9c08018f4
 var mode = require('../config/mode.json')
 let testMode = false
 let connected = false
@@ -18,8 +14,8 @@ const os = require('os');
 var cpumodel = ""
 let processram
 
-let HorizonVer = "1.5.1"
-let LibhorizonVer = "0.3"
+let HorizonVer = "1.6"
+let LibhorizonVer = "0.4"
 
 const RawMessage = require('../features/rawMessage')
 const TestMode = require('../features/testMode')
@@ -27,6 +23,7 @@ const RestartBot = require('../features/restartBot')
 const SendLogs = require('../features/sendLogs')
 const SendCrashes = require('../features/sendCrashes')
 const VoiceChannel = require('../features/voiceChannel')
+const Horigame = require('../horigame/source')
 
 client.on('message', function (message) {
     let commandUsed = RawMessage.parse(message) ||
@@ -34,7 +31,8 @@ client.on('message', function (message) {
     RestartBot.parse(message) ||
     SendLogs.parse(message) ||
     SendCrashes.parse(message) ||
-    VoiceChannel.parse(message)
+    VoiceChannel.parse(message) ||
+    Horigame.parse(message)
 })
 
 client.on('message', function (message) {
@@ -200,8 +198,8 @@ client.on('ready', () => {
 });
 
 function dga1() {
-	client.user.setActivity("Bonjour !");
-	setTimeout(dga2, 3000);
+    client.user.setActivity("Bonjour !");
+	setTimeout(dga2, 10000);
 }
 
 function dga2() {
@@ -218,33 +216,33 @@ function dga2() {
     var day  = date.getDate();
     day = (day < 10 ? "0" : "") + day;
     var time = day + "/" + month + "/" + year;
-	client.user.setActivity(time);
-	setTimeout(dga3, 3000);
+    client.user.setActivity(time);
+	setTimeout(dga3, 10000);
 }
 
 function dga3() {
-	client.user.setActivity(HorizonVer + " - libhorizon " + LibhorizonVer);
-	setTimeout(dga4, 3000);
+    client.user.setActivity(HorizonVer + " - libhorizon " + LibhorizonVer);
+	setTimeout(dga4, 10000);
 }
 
 function dga4() {
-	client.user.setActivity("Développé par Minteck")
-	setTimeout(dga5, 3000);
+    client.user.setActivity("Code : Minteck")
+	setTimeout(dga5, 10000);
 }
 
 function dga5() {
-	client.user.setActivity("Imaginé par Horizon.Data")
-	setTimeout(dga6, 3000);
+    client.user.setActivity("Idées : Horizon.Data")
+	setTimeout(dga6, 10000);
 }
 
 function dga6() {
-	client.user.setActivity("#Plug²4Ever")
-	setTimeout(dga7, 3000);
+    client.user.setActivity("#Plug²4Ever")
+	setTimeout(dga7, 10000);
 }
 
 function dga7() {
-	client.user.setActivity("")
-	setTimeout(dga1, 3000);
+    client.user.setActivity("hg init")
+	setTimeout(dga1, 10000);
 }
 
 function requestRestart() {
@@ -289,16 +287,9 @@ client.on('message', function (message) {
             var res = '';
 			let computercpu = os.cpus
             //let cpumodel = os.cpus.model.toString
-            computercpu.prototype.toString = function getCpuModel() {
-                cpumodel = this.model;
-                return ret;
-            }
-            process.memoryUsage.prototype.toString = function getProcessRam() {
-                processram = this.heapUsed;
-                return ret;
-            }
-            let readableprocessram = Math.floor(processram/1000000)
-			message.channel.send("```\nMais dis donc, tu es un petit Riolu toi !\nVoici quelques informations de déboggage qui peuvent t'être utiles durant ton chemin !\n\n                       Version d'Horizon : " + HorizonVer +"\n                   Version de libhorizon :" + LibhorizonVer + "\n                         Serveur courant : main-shared\n                   Canal de mises à jour : nightly\n                 Temps de fonctionnement : " + client.uptime + "ms\n                                  Avatar : " + client.user.displayAvatarURL + "\n                                  Créé à : " + client.user.createdTimestamp + "\n                      Identifiant du bot : " + client.user.id + "\n          Identifiant du dernier message : " + client.user.lastMessageID + "\nServeurs sur lesquels le bot est présent : " + client.guilds.size + "\n                        Temps de latence : " + client.pings + "ms" + " (moy. " + client.ping + "ms)\n                    Identifiant du Shard : " + shard.id + "\n                  Plate-forme du serveur : " + system + "\n              Version de l'OS du serveur : " + release + "\n                 Architecture du serveur : " + cpuarch + "\n                            Mémoire vive : " + readabletookram + " Mio occupés (dont " + readableprocessram + " Mio alloués à Horizon) sur " + readabletotalram + " Mio (" + readablefreeram + " Mio libres)\n                   Processeur du serveur : " + cpumodel + "\n                          Nom du serveur : " + message.guild.name  + "\n          Chemin vers l'îcone du serveur : " + message.guild.iconURL + "\n                   Membres de ce serveur : " + message.guild.memberCount + "\n                 Propriétaire du serveur : " + message.guild.owner.displayName + "\n                       Région du serveur : " + message.guild.region + "\n               Niv. de vérif. du serveur : " + message.guild.verificationLevel + "\n              Acronyme du nom du serveur : " + message.guild.nameAcronym + "\n                 Salon d'absence (vocal) : " + message.guild.afkChannel.name + "\n   Tps. avant dépl. dans le salon d'abs. : " + message.guild.afkTimeout + " sec.\n```")
+            const processram = process.memoryUsage().heapUsed / 1024 / 1024;
+            const readableprocessram = Math.round(processram*100)/100
+			message.channel.send("```\nMais dis donc, tu es un petit Riolu toi !\nVoici quelques informations de déboggage qui peuvent t'être utiles durant ton chemin !\n\n                       Version d'Horizon : " + HorizonVer +"\n                   Version de libhorizon : " + LibhorizonVer + "\n                         Serveur courant : main-shared\n                   Canal de mises à jour : nightly\n                 Temps de fonctionnement : " + client.uptime + "ms\n                                  Avatar : " + client.user.displayAvatarURL + "\n                                  Créé à : " + client.user.createdTimestamp + "\n                      Identifiant du bot : " + client.user.id + "\n          Identifiant du dernier message : " + client.user.lastMessageID + "\nServeurs sur lesquels le bot est présent : " + client.guilds.size + "\n                        Temps de latence : " + client.pings + "ms" + " (moy. " + client.ping + "ms)\n                    Identifiant du Shard : " + shard.id + "\n                  Plate-forme du serveur : " + system + "\n              Version de l'OS du serveur : " + release + "\n                 Architecture du serveur : " + cpuarch + "\n                            Mémoire vive : " + readabletookram + " Mio occupés (dont " + readableprocessram + " Mio alloués à Horizon) sur " + readabletotalram + " Mio (" + readablefreeram + " Mio libres)\n                   Processeur du serveur : " + cpumodel + "\n                          Nom du serveur : " + message.guild.name  + "\n          Chemin vers l'îcone du serveur : " + message.guild.iconURL + "\n                   Membres de ce serveur : " + message.guild.memberCount + "\n                 Propriétaire du serveur : " + message.guild.owner.displayName + "\n                       Région du serveur : " + message.guild.region + "\n               Niv. de vérif. du serveur : " + message.guild.verificationLevel + "\n              Acronyme du nom du serveur : " + message.guild.nameAcronym + "\n                 Salon d'absence (vocal) : " + message.guild.afkChannel.name + "\n   Tps. avant dépl. dans le salon d'abs. : " + message.guild.afkTimeout + " sec.\n```")
             }else{
 				if (message.guild) { loginfo = "Rejet d'accès à l'utilisateur @" + message.author.username + "#" + message.author.tag + " (" + message.author.id + ") depuis le serveur " + message.guild.name + " (#" + message.channel.name + ")" + " | " + message.content } else { loginfo = "Rejet d'accès à l'utilisateur @" + message.author.tag + " (" + message.author.id + ") via messages privés | " + message.content }
 				showLog();
