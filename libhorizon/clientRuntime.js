@@ -1,11 +1,15 @@
 var childProcess = require('child_process');
+<<<<<<< HEAD
 var config = require('../config/config.json');
+=======
+var config = require('../config/config.json')
+>>>>>>> 6b8c6cebe8de81aa8cf3ea8afd5ea3c9c08018f4
 var mode = require('../config/mode.json')
 let testMode = false
 let connected = false
 let loginfo = "nothing"
 let vocalChannel = null
-const underscorelib = require('underscore');
+//const underscorelib = require('underscore');
 const Discord = require('discord.js');
 const client = new Discord.Client();
 const shard = new Discord.ShardClientUtil(client);

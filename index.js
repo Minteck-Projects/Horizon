@@ -14,7 +14,7 @@
 // Pour en savoir plus, vous pouvez accéder à ce site Internet :
 //    http://projectpedia.referata.com/wiki/Licence:Minteck_Projects_PLA
 
-const underscorelib = require('underscore');
+//const underscorelib = require('underscore');
 const Discord = require('discord.js');
 const os = require('os');
 const fs = require('fs');
