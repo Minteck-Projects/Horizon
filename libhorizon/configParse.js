@@ -38,64 +38,70 @@ if ( config.saveCrashes != false && config.saveCrashes != true ) {
     invalidConfig();
 }
 
+if ( config.dynamicGameActivity != false && config.dynamicGameActivity != true ) {
+    confInfo = "La propriété 'dynamicGameActivity' n'est pas une valeur booléenne.";
+    confLine = 9
+    invalidConfig();
+}
+
 if ( config.commandsPrefix.length > 1 ) {
     confInfo = "La propriété 'commandsPrefix' est plus longue que 1 caractère (commandsPrefix.length > 1)";
-    confLine = 10
+    confLine = 11
     invalidConfig();
 }
 
 if ( config.commandsSuffix.length > 1 ) {
     confInfo = "La propriété 'commandsSuffix' est plus longue que 1 caractère (commandsSuffix.length > 1)";
-    confLine = 11
+    confLine = 12
     invalidConfig();
 }
 
 if ( config.enableVoiceChannel != false && config.enableVoiceChannel != true ) {
     confInfo = "La propriété 'enableVoiceChannel' n'est pas une valeur booléenne.";
-    confLine = 16
+    confLine = 15
     invalidConfig();
 }
 
 if ( config.enableChangeGameActivity != false && config.enableChangeGameActivity != true ) {
     confInfo = "La propriété 'enableChangeGameActivity' n'est pas une valeur booléenne.";
-    confLine = 17
+    confLine = 16
     invalidConfig();
 }
 
 if ( config.enableRawMessages != false && config.enableRawMessages != true ) {
     confInfo = "La propriété 'enableRawMessages' n'est pas une valeur booléenne.";
-    confLine = 18
+    confLine = 17
     invalidConfig();
 }
 
 if ( config.enableActionCancel != false && config.enableActionCancel != true ) {
     confInfo = "La propriété 'enableActionCancel' n'est pas une valeur booléenne.";
-    confLine = 19
+    confLine = 18
     invalidConfig();
 }
 
 if ( config.enableRestartCmd != false && config.enableRestartCmd != true ) {
     confInfo = "La propriété 'enableRestartCmd' n'est pas une valeur booléenne.";
-    confLine = 20
+    confLine = 19
     invalidConfig();
 }
 
 if ( config.enableTestMode != false && config.enableTestMode != true ) {
     confInfo = "La propriété 'enableTestMode' n'est pas une valeur booléenne.";
-    confLine = 21
+    confLine = 20
     invalidConfig();
 }
 
 if ( config.enableDebugInfo != false && config.enableDebugInfo != true ) {
     confInfo = "La propriété 'enableDebugInfo' n'est pas une valeur booléenne.";
-    confLine = 22
+    confLine = 21
     invalidConfig();
 }
 
 if ( config.enableVoiceDebugInfo != false && config.enableVoiceDebugInfo != true ) {
     confInfo = "La propriété 'enableVoiceDebugInfo' n'est pas une valeur booléenne.";
-    confLine = 23
+    confLine = 22
     invalidConfig();
 }
 
-console.log("Configuration OK : 17 propriétés chargées")
+console.log("Configuration OK : 18 propriétés chargées")

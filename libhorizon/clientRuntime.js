@@ -1,5 +1,6 @@
 var childProcess = require('child_process');
-var config = require('../config/config.json')
+var config = require('../config/config.json');
+var mode = require('../config/mode.json')
 let testMode = false
 let connected = false
 let loginfo = "nothing"
@@ -12,6 +13,9 @@ const fs = require('fs');
 const os = require('os');
 var cpumodel = ""
 let processram
+
+let HorizonVer = "1.5.1"
+let LibhorizonVer = "0.3"
 
 const RawMessage = require('../features/rawMessage')
 const TestMode = require('../features/testMode')
@@ -33,6 +37,7 @@ client.on('message', function (message) {
     if (config.enableRawMessages) {
         if (message.content.startsWith(config.commandsPrefix + config.commandsSuffix + 'g')) {
             if (message.author.username == "Minteck | ルカリオ" || message.author.username == "Horizon.Data") {
+				if (config.dynamicGameActivity == false) {
                       let args = message.content.split(' ');
                       args.shift();
                       message.delete();
@@ -49,7 +54,9 @@ client.on('message', function (message) {
                       } else {
                       loginfo = "Message de jeu modifié à partir d'un salon DM à l'utilisateur @" + message.author.tag + " : " + text
                       showLog();
-        }}else{
+				}}else{
+					message.author.send("Le message de jeu ne peut être modifié que si la propriété `dynamicGameActivity` est définie sur `true`. Demandez à mon administrateur de modifier cette propriété dans le fichier `config/config.json`")
+			}}else{
                       if (message.guild) { loginfo = "Rejet d'accès à l'utilisateur @" + message.author.username + "#" + message.author.tag + " (" + message.author.id + ") depuis le serveur " + message.guild.name + " (#" + message.channel.name + ")" + " | " + message.content } else { loginfo = "Rejet d'accès à l'utilisateur @" + message.author.tag + " (" + message.author.id + ") via messages privés | " + message.content }
                       showLog();
                   }
@@ -175,7 +182,11 @@ client.on('ready', () => {
     loginfo = "Connexion établie"
     showLog();
     if (config.testMode == false) {
+	  if (config.dynamicGameActivity == false) {
       client.user.setActivity(config.gameActivity).catch(console.error);
+	  }else{
+		  dga1();
+	  }
       fs.writeFile("./config/mode.json", "{\n\"test\": false\n}")
     } else {
       client.user.setActivity("Horizon - Mode test").catch(console.error);
@@ -183,6 +194,54 @@ client.on('ready', () => {
       fs.writeFile("./config/mode.json", "{\n\"test\": true\n}")
     }
 });
+
+function dga1() {
+	client.user.setActivity("Bonjour !");
+	setTimeout(dga2, 3000);
+}
+
+function dga2() {
+	var date = new Date();
+    var hour = date.getHours() + 1;
+    hour = (hour < 10 ? "0" : "") + hour;
+    var min  = date.getMinutes();
+    min = (min < 10 ? "0" : "") + min;
+    var sec  = date.getSeconds();
+    sec = (sec < 10 ? "0" : "") + sec;
+    var year = date.getFullYear();
+    var month = date.getMonth() + 1;
+    month = (month < 10 ? "0" : "") + month;
+    var day  = date.getDate();
+    day = (day < 10 ? "0" : "") + day;
+    var time = day + "/" + month + "/" + year;
+	client.user.setActivity(time);
+	setTimeout(dga3, 3000);
+}
+
+function dga3() {
+	client.user.setActivity(HorizonVer + " - libhorizon " + LibhorizonVer);
+	setTimeout(dga4, 3000);
+}
+
+function dga4() {
+	client.user.setActivity("Développé par Minteck")
+	setTimeout(dga5, 3000);
+}
+
+function dga5() {
+	client.user.setActivity("Imaginé par Horizon.Data")
+	setTimeout(dga6, 3000);
+}
+
+function dga6() {
+	client.user.setActivity("#Plug²4Ever")
+	setTimeout(dga7, 3000);
+}
+
+function dga7() {
+	client.user.setActivity("")
+	setTimeout(dga1, 3000);
+}
 
 function requestRestart() {
 	loginfo = "Une demande de redémarrage à été reçue. Le client va maintenant redémarrer..."
@@ -235,7 +294,7 @@ client.on('message', function (message) {
                 return ret;
             }
             let readableprocessram = Math.floor(processram/1000000)
-			message.channel.send("```\nMais dis donc, tu es un petit Riolu toi !\nVoici quelques informations de déboggage qui peuvent t'être utiles durant ton chemin !\n\n                       Version d'Horizon : 1.5\n                   Version de libhorizon : 0.2\n                         Serveur courant : main-shared\n                   Canal de mises à jour : nightly\n                 Temps de fonctionnement : " + client.uptime + "ms\n                                  Avatar : " + client.user.displayAvatarURL + "\n                                  Créé à : " + client.user.createdTimestamp + "\n                      Identifiant du bot : " + client.user.id + "\n          Identifiant du dernier message : " + client.user.lastMessageID + "\nServeurs sur lesquels le bot est présent : " + client.guilds.size + "\n                        Temps de latence : " + client.pings + "ms" + " (moy. " + client.ping + "ms)\n                    Identifiant du Shard : " + shard.id + "\n                  Plate-forme du serveur : " + system + "\n              Version de l'OS du serveur : " + release + "\n                 Architecture du serveur : " + cpuarch + "\n                            Mémoire vive : " + readabletookram + " Mio occupés (dont " + readableprocessram + " Mio alloués à Horizon) sur " + readabletotalram + " Mio (" + readablefreeram + " Mio libres)\n                   Processeur du serveur : " + cpumodel + "\n                          Nom du serveur : " + message.guild.name  + "\n          Chemin vers l'îcone du serveur : " + message.guild.iconURL + "\n                   Membres de ce serveur : " + message.guild.memberCount + "\n                 Propriétaire du serveur : " + message.guild.owner.displayName + "\n                       Région du serveur : " + message.guild.region + "\n               Niv. de vérif. du serveur : " + message.guild.verificationLevel + "\n              Acronyme du nom du serveur : " + message.guild.nameAcronym + "\n                 Salon d'absence (vocal) : " + message.guild.afkChannel.name + "\n   Tps. avant dépl. dans le salon d'abs. : " + message.guild.afkTimeout + " sec.\n```")
+			message.channel.send("```\nMais dis donc, tu es un petit Riolu toi !\nVoici quelques informations de déboggage qui peuvent t'être utiles durant ton chemin !\n\n                       Version d'Horizon : " + HorizonVer +"\n                   Version de libhorizon :" + LibhorizonVer + "\n                         Serveur courant : main-shared\n                   Canal de mises à jour : nightly\n                 Temps de fonctionnement : " + client.uptime + "ms\n                                  Avatar : " + client.user.displayAvatarURL + "\n                                  Créé à : " + client.user.createdTimestamp + "\n                      Identifiant du bot : " + client.user.id + "\n          Identifiant du dernier message : " + client.user.lastMessageID + "\nServeurs sur lesquels le bot est présent : " + client.guilds.size + "\n                        Temps de latence : " + client.pings + "ms" + " (moy. " + client.ping + "ms)\n                    Identifiant du Shard : " + shard.id + "\n                  Plate-forme du serveur : " + system + "\n              Version de l'OS du serveur : " + release + "\n                 Architecture du serveur : " + cpuarch + "\n                            Mémoire vive : " + readabletookram + " Mio occupés (dont " + readableprocessram + " Mio alloués à Horizon) sur " + readabletotalram + " Mio (" + readablefreeram + " Mio libres)\n                   Processeur du serveur : " + cpumodel + "\n                          Nom du serveur : " + message.guild.name  + "\n          Chemin vers l'îcone du serveur : " + message.guild.iconURL + "\n                   Membres de ce serveur : " + message.guild.memberCount + "\n                 Propriétaire du serveur : " + message.guild.owner.displayName + "\n                       Région du serveur : " + message.guild.region + "\n               Niv. de vérif. du serveur : " + message.guild.verificationLevel + "\n              Acronyme du nom du serveur : " + message.guild.nameAcronym + "\n                 Salon d'absence (vocal) : " + message.guild.afkChannel.name + "\n   Tps. avant dépl. dans le salon d'abs. : " + message.guild.afkTimeout + " sec.\n```")
             }else{
 				if (message.guild) { loginfo = "Rejet d'accès à l'utilisateur @" + message.author.username + "#" + message.author.tag + " (" + message.author.id + ") depuis le serveur " + message.guild.name + " (#" + message.channel.name + ")" + " | " + message.content } else { loginfo = "Rejet d'accès à l'utilisateur @" + message.author.tag + " (" + message.author.id + ") via messages privés | " + message.content }
 				showLog();

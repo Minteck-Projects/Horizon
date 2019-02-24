@@ -6,6 +6,7 @@
 	"keepLogs": true,
     "saveCrashes": true,
     "gameActivity": "Forza Horizon 4",
+	"dynamicGameActivity": true,
     
 	"commandsPrefix": ">",
     "commandsSuffix": "<",
