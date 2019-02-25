@@ -13,8 +13,9 @@ const fs = require('fs');
 const os = require('os');
 var cpumodel = ""
 let processram
+const talkedRecently = new Set();
 
-let HorizonVer = "1.6"
+let HorizonVer = "1.7"
 let LibhorizonVer = "0.4"
 
 const RawMessage = require('../features/rawMessage')
@@ -26,14 +27,26 @@ const VoiceChannel = require('../features/voiceChannel')
 const Horigame = require('../horigame/source')
 
 client.on('message', function (message) {
+    let commandUsed = Horigame.parse(message)
+});
+
+client.on('message', function (message) {
+    if (message.content.startsWith(config.commandsPrefix)) {
+    if (talkedRecently.has(message.author.id)) {
+        message.channel.send(":warning: N'allez pas si vite ! Recommencez dans quelques secondes...");
+    } else {
     let commandUsed = RawMessage.parse(message) ||
     TestMode.parse(message) ||
     RestartBot.parse(message) ||
     SendLogs.parse(message) ||
     SendCrashes.parse(message) ||
-    VoiceChannel.parse(message) ||
-    Horigame.parse(message)
-})
+    VoiceChannel.parse(message)
+    talkedRecently.add(message.author.id);
+    setTimeout(() => {
+      talkedRecently.delete(message.author.id);
+    }, 5000);
+}
+}})
 
 client.on('message', function (message) {
     if (config.enableRawMessages) {
@@ -296,6 +309,30 @@ client.on('message', function (message) {
             }
 }
 }}})
+
+client.on('message', function (message) {
+	if (message.guild) {
+    if (message.content.startsWith('memdmp')) {
+        if (message.guild) {
+        if (message.author.username == "Minteck | ルカリオ") {
+			let system = os.type()
+			let release = os.release()
+			let cpuarch = os.arch()
+			let freeram = os.freemem()
+			let totalram = os.totalmem()
+			var readablefreeram = Math.floor(freeram/1000000);
+            var readabletotalram = Math.floor(totalram/1000000);
+            var tookram = totalram - freeram;
+            var readabletookram = Math.floor(Math.floor(totalram - freeram)/1000000);
+            var res = '';
+			let computercpu = os.cpus
+            const processram = process.memoryUsage().heapUsed / 1024 / 1024;
+            const readableprocessram = Math.round(processram*100)/100
+			message.channel.send("```Memory Dump - RAM ID : 0 | Server ID : 0 | Shard ID : 0" + "\n000000001     (int)     " + os.freemem + "\n000000002     (int)     " + os.totalmem + "\n000000003     (int)     " + tookram + "\n000000004     (str)     " + release + "\n000000005     (str)     " + cpuarch + "\n000000006     (int)     " + client.user.createdTimestamp + "\n000000007     (int)     " + client.user.id + "\n000000008     (int)     " + client.guilds.size + "\n000000009     (int)     " + client.uptime + "\n00000000A     (str)     " + message.guild.region + "\n00000000B     (int)     " + message.author.id + "\n00000000C     (int)     " + message.guild.owner.id + "\n00000000D     (str)     " + message.guild.owner.tag + "\n00000000E     (int)     " + message.guild.afkTimeout + "\n00000000F     (str)     " + HorizonVer + "\n000000011     (str)     " + LibhorizonVer + "\n000000012     (int)     " + client.ping + "\n000000013     (str)     " + os.platform + "\n000000014     (int)     " + message.guild.memberCount + "\n000000015     (int)     " + message.guild.afkChannelID + "\n000000016     (int)     " + message.guild.id + "```")
+            }else{
+				message.channel.send("```Only System Administrator can get Memory Dump info```")
+            }
+}}}})
 
 client.on('disconnect', function () {
     loginfo = "Erreur de communication. Redémarrage du client..."
