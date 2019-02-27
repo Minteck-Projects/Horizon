@@ -1,3 +1,6 @@
-var JsonDB = require('node-json-db');
-var db = new JsonDB("db.json", true, true);
-db.push("/game/testunit/surname","Profil de test");
+const translate = require('@vitalets/google-translate-api');
+translate("Bonjour", {from: 'fr', to: 'en'}).then(res => {
+    console.log(res.text)
+}).catch(err => {
+    console.error(err);
+});

@@ -12,6 +12,7 @@ var db = new JsonDB("horigame/db.json", true, true);
 let lstmsg
 const talkedRecently = new Set();
 const xpCooldown = new Set();
+const translate = require('@vitalets/google-translate-api');
 
 
 module.exports = class Horigame extends Command {
@@ -190,8 +191,232 @@ module.exports = class Horigame extends Command {
                                     }
                                 }
                             }else{
-            message.channel.send(":no_entry_sign: **" + message.content + "** n'est pas reconnu en temps que commande interne de Horigame. Vérifiez l'orthographe et réessayez. - `" + message.author.username + "`")
-}}}}}}}}}}}}
+                if (message.content.startsWith('hg te ')) {
+                    let args = message.content.split(' ');
+                    args.shift();
+                    let part1 = args.join(' ')
+                    args = part1.split(' ');
+                    args.shift();
+                    let text = args.join(' ')
+                    translate(text, {to: 'en'}).then(res => {
+                        if (res.from.language.iso) {
+                            if (res.from.language.iso == "fr") { var language = "le **français**" }
+                            if (res.from.language.iso == "en") { var language = "l'**anglais**" }
+                            if (res.from.language.iso == "nl") { var language = "le **néerlandais**" }
+                            if (res.from.language.iso == "es") { var language = "l'**espagnol**" }
+                            if (res.from.language.iso == "ja") { var language = "le **japonais**" }
+                            if (res.from.language.iso == "af") { var language = "l'**afriquain**" }
+                            if (res.from.language.iso == "ca") { var language = "le **catalan**" }
+                            if (res.from.language.iso == "co") { var language = "le **corse**" }
+                            if (res.from.language.iso == "cs") { var language = "le **tchèque**" }
+                            if (res.from.language.iso == "da") { var language = "le **danois**" }
+                            if (res.from.language.iso == "de") { var language = "l'**allemand**" }
+                            if (res.from.language.iso == "fi") { var language = "le **finnois**" }
+                            if (res.from.language.iso == "hr") { var language = "le **croate**" }
+                            if (res.from.language.iso == "ie") { var language = "la **langue occidentale**" }
+                            if (res.from.language.iso == "it") { var language = "l'**italien**" }
+                            if (res.from.language.iso == "ko") { var language = "le **coréen**" }
+                            if (res.from.language.iso == "la") { var language = "le **latin**" }
+                            if (res.from.language.iso == "pl") { var language = "le **polonais**" }
+                            if (res.from.language.iso == "pt") { var language = "le **portugais**" }
+                            if (res.from.language.iso == "sk") { var language = "le **slovaque**" }
+                            if (res.from.language.iso == "sv") { var language = "le **suédois**" }
+                            if (res.from.language.iso == "tr") { var language = "le **turc**" }
+                            if (res.from.language.iso == "ty") { var language = "le **tahitien**" }
+                            if (res.from.language.iso == "tr") { var language = "le **turc**" }
+                            if (res.from.language.iso == "uk") { var language = "l'**ukrainien**" }
+                            if (res.from.language.iso == "zh") { var language = "le **chinois**" }
+                        }else{
+                            var language = "plusieurs langues"
+                        }
+                        if (res.from.text.autoCorrected == true) {
+                            if (language === undefined) { var language = "plusieurs langues" }
+                            message.channel.send(":arrow_right: " + res.text + "\n:warning: Traduit de **" + res.from.text.value + "**, corrigé automatiquement\n:information_source: Traduit depuis " + language);
+                        }else{
+                            if (res.from.text.didYouMean) {
+                                if (language === undefined) { var language = "plusieurs langues" }
+                                message.channel.send(":arrow_right: " + res.text + "\n:warning: Essayez avec cette orthographe **" + res.from.text.value + "**...\n:information_source: Traduit depuis " + language);
+                            }else{
+                                if (res.text) {
+                                    if (language === undefined) { var language = "plusieurs langues" }
+                    message.channel.send(":arrow_right: " + res.text + "\n:information_source: Traduit depuis " + language);}else{
+                        message.channel.send(":no_entry: Aucun résultat pour **" + res.from.text.value + "**")
+                    }
+                }}}).catch(err => {
+                    message.channel.send(":no_entry: **Désolé**, mais une erreur s'est produite :\n```\n" + err + "\n```");
+                    console.log(err);
+                });
+                }else{
+                    if (message.content.startsWith('hg tf ')) {
+                        let args = message.content.split(' ');
+                        args.shift();
+                        let part1 = args.join(' ')
+                        args = part1.split(' ');
+                        args.shift();
+                        let text = args.join(' ')
+                        translate(text, {to: 'fr'}).then(res => {
+                            if (res.from.language.iso) {
+                                if (res.from.language.iso == "fr") { var language = "le **français**" }
+                                if (res.from.language.iso == "en") { var language = "l'**anglais**" }
+                                if (res.from.language.iso == "nl") { var language = "le **néerlandais**" }
+                                if (res.from.language.iso == "es") { var language = "l'**espagnol**" }
+                                if (res.from.language.iso == "ja") { var language = "le **japonais**" }
+                                if (res.from.language.iso == "af") { var language = "l'**afriquain**" }
+                                if (res.from.language.iso == "ca") { var language = "le **catalan**" }
+                                if (res.from.language.iso == "co") { var language = "le **corse**" }
+                                if (res.from.language.iso == "cs") { var language = "le **tchèque**" }
+                                if (res.from.language.iso == "da") { var language = "le **danois**" }
+                                if (res.from.language.iso == "de") { var language = "l'**allemand**" }
+                                if (res.from.language.iso == "fi") { var language = "le **finnois**" }
+                                if (res.from.language.iso == "hr") { var language = "le **croate**" }
+                                if (res.from.language.iso == "ie") { var language = "la **langue occidentale**" }
+                                if (res.from.language.iso == "it") { var language = "l'**italien**" }
+                                if (res.from.language.iso == "ko") { var language = "le **coréen**" }
+                                if (res.from.language.iso == "la") { var language = "le **latin**" }
+                                if (res.from.language.iso == "pl") { var language = "le **polonais**" }
+                                if (res.from.language.iso == "pt") { var language = "le **portugais**" }
+                                if (res.from.language.iso == "sk") { var language = "le **slovaque**" }
+                                if (res.from.language.iso == "sv") { var language = "le **suédois**" }
+                                if (res.from.language.iso == "tr") { var language = "le **turc**" }
+                                if (res.from.language.iso == "ty") { var language = "le **tahitien**" }
+                                if (res.from.language.iso == "tr") { var language = "le **turc**" }
+                                if (res.from.language.iso == "uk") { var language = "l'**ukrainien**" }
+                                if (res.from.language.iso == "zh") { var language = "le **chinois**" }
+                            }else{
+                                var language = "plusieurs langues"
+                            }
+                            if (res.from.text.autoCorrected == true) {
+                                if (language === undefined) { var language = "plusieurs langues" }
+                                message.channel.send(":arrow_right: " + res.text + "\n:warning: Traduit de **" + res.from.text.value + "**, corrigé automatiquement\n:information_source: Traduit depuis " + language);
+                            }else{
+                                if (res.from.text.didYouMean) {
+                                    if (language === undefined) { var language = "plusieurs langues" }
+                                    message.channel.send(":arrow_right: " + res.text + "\n:warning: Essayez avec cette orthographe **" + res.from.text.value + "**...\n:information_source: Traduit depuis " + language);
+                                }else{
+                                    if (res.text) {
+                                        if (language === undefined) { var language = "plusieurs langues" }
+                        message.channel.send(":arrow_right: " + res.text + "\n:information_source: Traduit depuis " + language);}else{
+                            message.channel.send(":no_entry: Aucun résultat pour **" + res.from.text.value + "**")
+                        }
+                    }}}).catch(err => {
+                        message.channel.send(":no_entry: **Désolé**, mais une erreur s'est produite :\n```\n" + err + "\n```");
+                        console.log(err);
+                    });
+                    }else{
+                        if (message.content.startsWith('hg tj ')) {
+                            let args = message.content.split(' ');
+                            args.shift();
+                            let part1 = args.join(' ')
+                            args = part1.split(' ');
+                            args.shift();
+                            let text = args.join(' ')
+                            translate(text, {to: 'ja'}).then(res => {
+                                if (res.from.language.iso) {
+                                    if (res.from.language.iso == "fr") { var language = "le **français**" }
+                                    if (res.from.language.iso == "en") { var language = "l'**anglais**" }
+                                    if (res.from.language.iso == "nl") { var language = "le **néerlandais**" }
+                                    if (res.from.language.iso == "es") { var language = "l'**espagnol**" }
+                                    if (res.from.language.iso == "ja") { var language = "le **japonais**" }
+                                    if (res.from.language.iso == "af") { var language = "l'**afriquain**" }
+                                    if (res.from.language.iso == "ca") { var language = "le **catalan**" }
+                                    if (res.from.language.iso == "co") { var language = "le **corse**" }
+                                    if (res.from.language.iso == "cs") { var language = "le **tchèque**" }
+                                    if (res.from.language.iso == "da") { var language = "le **danois**" }
+                                    if (res.from.language.iso == "de") { var language = "l'**allemand**" }
+                                    if (res.from.language.iso == "fi") { var language = "le **finnois**" }
+                                    if (res.from.language.iso == "hr") { var language = "le **croate**" }
+                                    if (res.from.language.iso == "ie") { var language = "la **langue occidentale**" }
+                                    if (res.from.language.iso == "it") { var language = "l'**italien**" }
+                                    if (res.from.language.iso == "ko") { var language = "le **coréen**" }
+                                    if (res.from.language.iso == "la") { var language = "le **latin**" }
+                                    if (res.from.language.iso == "pl") { var language = "le **polonais**" }
+                                    if (res.from.language.iso == "pt") { var language = "le **portugais**" }
+                                    if (res.from.language.iso == "sk") { var language = "le **slovaque**" }
+                                    if (res.from.language.iso == "sv") { var language = "le **suédois**" }
+                                    if (res.from.language.iso == "tr") { var language = "le **turc**" }
+                                    if (res.from.language.iso == "ty") { var language = "le **tahitien**" }
+                                    if (res.from.language.iso == "tr") { var language = "le **turc**" }
+                                    if (res.from.language.iso == "uk") { var language = "l'**ukrainien**" }
+                                    if (res.from.language.iso == "zh") { var language = "le **chinois**" }
+                                }else{
+                                    var language = "plusieurs langues"
+                                }
+                                if (res.from.text.autoCorrected == true) {
+                                    if (language === undefined) { var language = "plusieurs langues" }
+                                    message.channel.send(":arrow_right: " + res.text + "\n:warning: Traduit de **" + res.from.text.value + "**, corrigé automatiquement\n:information_source: Traduit depuis " + language);
+                                }else{
+                                    if (res.from.text.didYouMean) {
+                                        if (language === undefined) { var language = "plusieurs langues" }
+                                        message.channel.send(":arrow_right: " + res.text + "\n:warning: Essayez avec cette orthographe **" + res.from.text.value + "**...\n:information_source: Traduit depuis " + language);
+                                    }else{
+                                        if (res.text) {
+                                            if (language === undefined) { var language = "plusieurs langues" }
+                            message.channel.send(":arrow_right: " + res.text + "\n:information_source: Traduit depuis " + language);}else{
+                                message.channel.send(":no_entry: Aucun résultat pour **" + res.from.text.value + "**")
+                            }
+                        }}}).catch(err => {
+                            message.channel.send(":no_entry: **Désolé**, mais une erreur s'est produite :\n```\n" + err + "\n```");
+                            console.log(err);
+                        });
+                        }else{
+                            if (message.content.startsWith('hg tl ')) {
+                                let args = message.content.split(' ');
+                                args.shift();
+                                let part1 = args.join(' ')
+                                args = part1.split(' ');
+                                args.shift();
+                                let text = args.join(' ')
+                                translate(text, {to: 'la'}).then(res => {
+                                    if (res.from.language.iso) {
+                                        if (res.from.language.iso == "fr") { var language = "le **français**" }
+                                        if (res.from.language.iso == "en") { var language = "l'**anglais**" }
+                                        if (res.from.language.iso == "nl") { var language = "le **néerlandais**" }
+                                        if (res.from.language.iso == "es") { var language = "l'**espagnol**" }
+                                        if (res.from.language.iso == "ja") { var language = "le **japonais**" }
+                                        if (res.from.language.iso == "af") { var language = "l'**afriquain**" }
+                                        if (res.from.language.iso == "ca") { var language = "le **catalan**" }
+                                        if (res.from.language.iso == "co") { var language = "le **corse**" }
+                                        if (res.from.language.iso == "cs") { var language = "le **tchèque**" }
+                                        if (res.from.language.iso == "da") { var language = "le **danois**" }
+                                        if (res.from.language.iso == "de") { var language = "l'**allemand**" }
+                                        if (res.from.language.iso == "fi") { var language = "le **finnois**" }
+                                        if (res.from.language.iso == "hr") { var language = "le **croate**" }
+                                        if (res.from.language.iso == "ie") { var language = "la **langue occidentale**" }
+                                        if (res.from.language.iso == "it") { var language = "l'**italien**" }
+                                        if (res.from.language.iso == "ko") { var language = "le **coréen**" }
+                                        if (res.from.language.iso == "la") { var language = "le **latin**" }
+                                        if (res.from.language.iso == "pl") { var language = "le **polonais**" }
+                                        if (res.from.language.iso == "pt") { var language = "le **portugais**" }
+                                        if (res.from.language.iso == "sk") { var language = "le **slovaque**" }
+                                        if (res.from.language.iso == "sv") { var language = "le **suédois**" }
+                                        if (res.from.language.iso == "tr") { var language = "le **turc**" }
+                                        if (res.from.language.iso == "ty") { var language = "le **tahitien**" }
+                                        if (res.from.language.iso == "tr") { var language = "le **turc**" }
+                                        if (res.from.language.iso == "uk") { var language = "l'**ukrainien**" }
+                                        if (res.from.language.iso == "zh") { var language = "le **chinois**" }
+                                    }else{
+                                        var language = "plusieurs langues"
+                                    }
+                                    if (res.from.text.autoCorrected == true) {
+                                        if (language === undefined) { var language = "plusieurs langues" }
+                                        message.channel.send(":arrow_right: " + res.text + "\n:warning: Traduit de **" + res.from.text.value + "**, corrigé automatiquement\n:information_source: Traduit depuis " + language);
+                                    }else{
+                                        if (res.from.text.didYouMean) {
+                                            if (language === undefined) { var language = "plusieurs langues" }
+                                            message.channel.send(":arrow_right: " + res.text + "\n:warning: Essayez avec cette orthographe **" + res.from.text.value + "**...\n:information_source: Traduit depuis " + language);
+                                        }else{
+                                            if (res.text) {
+                                                if (language === undefined) { var language = "plusieurs langues" }
+                                message.channel.send(":arrow_right: " + res.text + "\n:information_source: Traduit depuis " + language);}else{
+                                    message.channel.send(":no_entry: Aucun résultat pour **" + res.from.text.value + "**")
+                                }
+                            }}}).catch(err => {
+                                message.channel.send(":no_entry: **Désolé**, mais une erreur s'est produite :\n```\n" + err + "\n```");
+                                console.log(err);
+                            });
+                            }else{
+            message.channel.send(":no_entry_sign: **" + message.content + "** n'est pas reconnu en tant que commande interne de Horigame. Vérifiez l'orthographe et réessayez. - `" + message.author.username + "`")
+}}}}}}}}}}}}}}}}
 try {
     var data = db.getData("/game/" + message.author.id);
 } catch(error) {
@@ -456,8 +681,8 @@ function showLog() {
     var day  = date.getDate();
     day = (day < 10 ? "0" : "") + day;
     var time = day + "/" + month + "/" + year + " " + hour + ":" + min + ":" + sec;
-    console.log(time + " : " + loginfo)
-    fs.appendFile("horigame.log", "\n" + time + " : " + loginfo, (error) => { /* handle error */ })
+    console.log(time + " [" + shard.id + "] : " + loginfo)
+    fs.appendFile("horigame.log", "\n" + time + " [" + shard.id + "] : " + loginfo, (error) => { /* handle error */ })
     }else{
         var date = new Date();
         var hour = date.getHours() + 1;
@@ -472,5 +697,5 @@ function showLog() {
         var day  = date.getDate();
         day = (day < 10 ? "0" : "") + day;
         var time = day + "/" + month + "/" + year + " " + hour + ":" + min + ":" + sec;
-        console.log("[Horigame] " + time + " : " + loginfo)
+        console.log("[Horigame] [" + shard.id + "] " + time + " : " + loginfo)
 }}

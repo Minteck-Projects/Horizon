@@ -6,3 +6,9 @@
 FINAL :
   - Ajouter la commande 'hg give'
   - Ajouter la commande 'hg redeem' pour récupérer les packs
+
+COMMANDES :
+'hg te' traduit n'importe quelle langue en anglais
+'hg tf' traduit n'importe quelle langue en français
+'hg tj' traduit n'importe quelle langue en japonais
+'hg tl' traduit n'importe quelle langue en latin

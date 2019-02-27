@@ -1,3 +1,11 @@
+ChangeLog, Mises à jour 1.5, 1.6, 1.7 et 1.8 :
+  - (1.8) Nous avons ajouté un système de Sharding, qui divise le bot en plusieurs processus, chacun étant capable d'accepter 2 500 serveurs. Le Sharding peut aussi être utile pour améliorer les performances. Par défaut, Horizon en dispose de 8 (soit 20 000 serveurs).
+  - (1.7) Il est désormais possible de faire des dons aux autres utilisateurs de Horigame, il suffit d'utiliser la commande 'hg give'
+  - (1.7) Un cooldown à été appliqué, pour évité l'abus d'XP de Horigame et le DDoS des commandes.
+  - (1.6) Horigame à été créé ! Il va rendre Horizon plus utile et dynamique, et vous permettra de vous amusez... Il suffit de commencer avec 'hg init'
+  - (1.6) Le temps de modification du message de jeu de 'dynamicGameActivity' à été modifié, c'est maintenant 10 secondes...
+  - (1.5) La propriété 'dynamicGameActivity' à été inclue, et permet de modifier automatiquement le message de jeu toutes les 5 secondes.
+
 ChangeLog, Mise à jour 1.4.3 :
   - Finalisation du système de gestion audio
   - Ajout de l'option --kernel-verbose

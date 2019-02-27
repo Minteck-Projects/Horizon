@@ -286,3 +286,35 @@ on process undefined, nodejs v8.9.3
 
 -----------------------------------------
 
+Unexpected Error Occured
+
+on process undefined, nodejs v8.9.3
+
+                       Version d'Horizon : 1.5
+                         Serveur courant : main-shared
+                   Canal de mises à jour : nightly
+                 Temps de fonctionnement : 0.295ms
+                  Plate-forme du serveur : Windows_NT
+              Version de l'OS du serveur : 10.0.17763
+                 Architecture du serveur : x64
+                            Mémoire vive : 734 Mio libres sur 4093 Mio
+                   Processeur du serveur : undefined
+
+-----------------------------------------
+
+Unexpected Error Occured
+
+on process undefined, nodejs v8.9.3
+
+                       Version d'Horizon : 1.5
+                         Serveur courant : main-shared
+                   Canal de mises à jour : nightly
+                 Temps de fonctionnement : 0.268ms
+                  Plate-forme du serveur : Windows_NT
+              Version de l'OS du serveur : 10.0.17763
+                 Architecture du serveur : x64
+                            Mémoire vive : 726 Mio libres sur 4093 Mio
+                   Processeur du serveur : undefined
+
+-----------------------------------------
+

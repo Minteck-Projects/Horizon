@@ -45,8 +45,8 @@ function runScript(scriptPath, callback) {
 runScript('./libhorizon/configParse.js', function (err) {
     if (err) throw err;
 	console.log('[libhorizonBootstraper] [configParse] La configuration à été initialisée correctement...');
-	runScript('./libhorizon/clientRuntime.js', function (err) {
+	runScript('./libhorizon/shardUtilManager.js', function (err) {
 		if (err) throw err;
 		console.log("[libhorizonBootstraper] [clientRuntime] Le client d'est arrêté");
-	});
+    });
 });

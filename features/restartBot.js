@@ -47,7 +47,7 @@ function showLog() {
     var day  = date.getDate();
     day = (day < 10 ? "0" : "") + day;
     var time = day + "/" + month + "/" + year + " " + hour + ":" + min + ":" + sec;
-    console.log(time + " : " + loginfo)
+    console.log(time + " [" + shard.id + "] : " + loginfo)
     fs.appendFile(config.logPath, "\n" + time + " : " + loginfo, (error) => { /* handle error */ })
     }else{
         var date = new Date();

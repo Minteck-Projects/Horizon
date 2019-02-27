@@ -110,4 +110,10 @@ if ( config.enableHorigame != false && config.enableHorigame != true ) {
     invalidConfig();
 }
 
-console.log("Configuration OK : 20 propriétés chargées")
+if ( (config.shardQty != 1 && config.shardQty != 2 && config.shardQty != 3 && config.shardQty != 4 && config.shardQty != 5 && config.shardQty != 6 && config.shardQty != 7 && config.shardQty != 8 && config.shardQty != 9 && config.shardQty != 10) || config.shardQty == 0 ) {
+    confInfo = "La propriété 'shardQty' n'est pas entre 1 et 10, ou est égale à 0.";
+    confLine = 28
+    invalidConfig();
+}
+
+console.log("Configuration OK : 21 propriétés chargées")

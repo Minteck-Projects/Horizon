@@ -1,6 +1,6 @@
 {
 
-    "token": "",
+    "token": "NTQ2NzcwMzE5NTc1MDg5MTc1.D0wChA.0NcHz-n8wMTnGOjm6hx1sfeQ6MU",
 	
     "testMode": false,
 	"keepLogs": true,
@@ -24,5 +24,6 @@
     "enableVoiceDebugInfo": true,
     "enableHorigame": true,
 
-    "pionnerRoleID": "408348879243968512"
+    "pionnerRoleID": "408348879243968512",
+    "shardQty": 4
 }

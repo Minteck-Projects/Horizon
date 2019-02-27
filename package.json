@@ -4,12 +4,15 @@
   "description": "Un bot Discord multifonctions",
   "main": "index.js",
   "dependencies": {
+    "@vitalets/google-translate-api": "^2.7.0",
     "discord.js": "^11.4.2",
     "ffmpeg-binaries": "^4.0.0",
     "gitlab": "^4.3.0",
+    "google-translate-api": "^2.3.0",
     "node-json-db": "^0.10.0",
     "opusscript": "^0.0.6",
     "underscore": "^1.9.1",
+    "uws": "^100.0.1",
     "ytdl-core": "^0.29.1"
   },
   "devDependencies": {},

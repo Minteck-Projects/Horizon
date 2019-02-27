@@ -15,8 +15,8 @@ var cpumodel = ""
 let processram
 const talkedRecently = new Set();
 
-let HorizonVer = "1.7"
-let LibhorizonVer = "0.4"
+let HorizonVer = "1.8"
+let LibhorizonVer = "0.5"
 
 const RawMessage = require('../features/rawMessage')
 const TestMode = require('../features/testMode')
@@ -174,8 +174,8 @@ function showLog() {
         var day  = date.getDate();
         day = (day < 10 ? "0" : "") + day;
         var time = day + "/" + month + "/" + year + " " + hour + ":" + min + ":" + sec;
-        console.log(time + " : " + loginfo)
-        fs.appendFile(config.logPath, "\n" + time + " : " + loginfo, (error) => { /* handle error */ })
+        console.log(time + " [" + shard.id + "] : " + loginfo)
+        fs.appendFile(config.logPath, "\n" + time + " [" + shard.id + "] : " + loginfo, (error) => { /* handle error */ })
         }else{
             var date = new Date();
             var hour = date.getHours() + 1;
@@ -190,7 +190,7 @@ function showLog() {
             var day  = date.getDate();
             day = (day < 10 ? "0" : "") + day;
             var time = day + "/" + month + "/" + year + " " + hour + ":" + min + ":" + sec;
-            console.log(time + " : " + loginfo)
+            console.log(time + " [" + shard.id + "] : " + loginfo)
 }}
 
 client.on('ready', () => {
@@ -211,7 +211,8 @@ client.on('ready', () => {
 });
 
 function dga1() {
-    client.user.setActivity("Bonjour !");
+    //client.user.setActivity("Bonjour !");
+    client.user.setPresence({ game: { name: "Bonjour !", details: "Découvrez Horizon..." }, status: 'online', "game.type": "STREAMING" })
 	setTimeout(dga2, 10000);
 }
 
@@ -229,32 +230,38 @@ function dga2() {
     var day  = date.getDate();
     day = (day < 10 ? "0" : "") + day;
     var time = day + "/" + month + "/" + year;
-    client.user.setActivity(time);
+    //client.user.setActivity(time);
+    client.user.setPresence({ game: { name: time, details: 'Nous sommes le ' + time }, status: 'online', "game.type": "WATCHING" })
 	setTimeout(dga3, 10000);
 }
 
 function dga3() {
-    client.user.setActivity(HorizonVer + " - libhorizon " + LibhorizonVer);
+    //client.user.setActivity(HorizonVer + " - libhorizon " + LibhorizonVer);
+    client.user.setPresence({ game: { name: HorizonVer + ' - libhorizon ' + LibhorizonVer, details: 'Je suis en version ' + HorizonVer + ' !' }, status: 'online', "game.type": "LISTENING" })
 	setTimeout(dga4, 10000);
 }
 
 function dga4() {
-    client.user.setActivity("Code : Minteck")
+    //client.user.setActivity("Code : Minteck")
+    client.user.setPresence({ game: { name: 'Code : Minteck', details: 'Code écrit par Minteck' }, status: 'online', "game.type": "STREAMING" })
 	setTimeout(dga5, 10000);
 }
 
 function dga5() {
-    client.user.setActivity("Idées : Horizon.Data")
+    //client.user.setActivity("Idées : Horizon.Data")
+    client.user.setPresence({ game: { name: 'Idées : Horizon.Data', details: 'Idées données par Horizon.Data' }, status: 'online', "game.type": "STREAMING" })
 	setTimeout(dga6, 10000);
 }
 
 function dga6() {
-    client.user.setActivity("#Plug²4Ever")
+    //client.user.setActivity("#Plug²4Ever")
+    client.user.setPresence({ game: { name: '#Plug²4Ever', details: 'Je serai toujours sur ce serveur !' }, status: 'online', "game.type": "WATCHING"  })
 	setTimeout(dga7, 10000);
 }
 
 function dga7() {
-    client.user.setActivity("hg init")
+    //client.user.setActivity("hg init")
+    client.user.setPresence({ game: { name: 'hg init', details: 'Commencez à jouer...' }, status: 'online', "game.type": "PLAYING" })
 	setTimeout(dga1, 10000);
 }
 
@@ -328,7 +335,7 @@ client.on('message', function (message) {
 			let computercpu = os.cpus
             const processram = process.memoryUsage().heapUsed / 1024 / 1024;
             const readableprocessram = Math.round(processram*100)/100
-			message.channel.send("```Memory Dump - RAM ID : 0 | Server ID : 0 | Shard ID : 0" + "\n000000001     (int)     " + os.freemem + "\n000000002     (int)     " + os.totalmem + "\n000000003     (int)     " + tookram + "\n000000004     (str)     " + release + "\n000000005     (str)     " + cpuarch + "\n000000006     (int)     " + client.user.createdTimestamp + "\n000000007     (int)     " + client.user.id + "\n000000008     (int)     " + client.guilds.size + "\n000000009     (int)     " + client.uptime + "\n00000000A     (str)     " + message.guild.region + "\n00000000B     (int)     " + message.author.id + "\n00000000C     (int)     " + message.guild.owner.id + "\n00000000D     (str)     " + message.guild.owner.tag + "\n00000000E     (int)     " + message.guild.afkTimeout + "\n00000000F     (str)     " + HorizonVer + "\n000000011     (str)     " + LibhorizonVer + "\n000000012     (int)     " + client.ping + "\n000000013     (str)     " + os.platform + "\n000000014     (int)     " + message.guild.memberCount + "\n000000015     (int)     " + message.guild.afkChannelID + "\n000000016     (int)     " + message.guild.id + "```")
+			message.channel.send("```Memory Dump - RAM ID : 0 | Server ID : 0 | Shard ID : " + shard.id + "\n000000001     (int)     " + os.freemem + "\n000000002     (int)     " + os.totalmem + "\n000000003     (int)     " + tookram + "\n000000004     (str)     " + release + "\n000000005     (str)     " + cpuarch + "\n000000006     (int)     " + client.user.createdTimestamp + "\n000000007     (int)     " + client.user.id + "\n000000008     (int)     " + client.guilds.size + "\n000000009     (int)     " + client.uptime + "\n00000000A     (str)     " + message.guild.region + "\n00000000B     (int)     " + message.author.id + "\n00000000C     (int)     " + message.guild.owner.id + "\n00000000D     (str)     " + message.guild.owner.tag + "\n00000000E     (int)     " + message.guild.afkTimeout + "\n00000000F     (str)     " + HorizonVer + "\n000000011     (str)     " + LibhorizonVer + "\n000000012     (int)     " + client.ping + "\n000000013     (str)     " + os.platform + "\n000000014     (int)     " + message.guild.memberCount + "\n000000015     (int)     " + message.guild.afkChannelID + "\n000000016     (int)     " + message.guild.id + "\n000000017     (int)     " + client.user.lastMessageID + "\n000000018     (str)     " + client.user.presence.game.name + "\n000000019     (str)     " + client.user.presence.status + "\n00000001A     (str)     " + config.logPath + "\n00000001B     (str)     " + config.commandsPrefix + config.commandsSuffix + "\n00000001C     (boo)     " + config.dynamicGameActivity + "\n00000001D     (boo)     " + config.enableHorigame + "\n00000001E     (int)     " + config.pionnerRoleID + "```")
             }else{
 				message.channel.send("```Only System Administrator can get Memory Dump info```")
             }
