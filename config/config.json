@@ -1,6 +1,6 @@
 {
 
-    "token": "NTQ2NzcwMzE5NTc1MDg5MTc1.D0wChA.0NcHz-n8wMTnGOjm6hx1sfeQ6MU",
+    "token": "TokenIci",
 	
     "testMode": false,
 	"keepLogs": true,
@@ -25,5 +25,8 @@
     "enableHorigame": true,
 
     "pionnerRoleID": "408348879243968512",
-    "shardQty": 4
+    "shardQty": 4,
+
+    "projectpediaUsername": "UtilisateurProjectpediaIci",
+    "projectpediaPassword": "MdpProjectpediaIci"
 }

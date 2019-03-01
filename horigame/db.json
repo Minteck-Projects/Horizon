@@ -17,13 +17,13 @@
             }
         },
         "294910706250285056": {
-            "level": 4,
-            "xp": 200,
+            "level": 5,
+            "xp": 130,
             "objects": {
                 "diamonds": 1,
                 "irons": 0,
                 "golds": 0,
-                "woods": 999999854
+                "woods": 999999869
             },
             "bonus": {
                 "xpBottle": 0,
@@ -35,7 +35,7 @@
         },
         "392012706279981066": {
             "level": 50000,
-            "xp": 330,
+            "xp": 340,
             "objects": {
                 "diamonds": 1,
                 "irons": 1,

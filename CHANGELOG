@@ -1,5 +1,15 @@
+ChangeLog, Mise à jour 1.9 :
+  - Ajout de l'intégration avec Projectpédia, et des commandes 'pp tp' et 'pp p'
+  - Ajout de la commande de maintenance ('mtnmode')
+  - Correction de bugs, parce qu'il en faut quand même un peu...
+
 ChangeLog, Mises à jour 1.5, 1.6, 1.7 et 1.8 :
   - (1.8) Nous avons ajouté un système de Sharding, qui divise le bot en plusieurs processus, chacun étant capable d'accepter 2 500 serveurs. Le Sharding peut aussi être utile pour améliorer les performances. Par défaut, Horizon en dispose de 8 (soit 20 000 serveurs).
+  - (1.8) Nous avons ajouté la commande 'hg t*' qui permet de traduire n'importe quel texte dans une de ces langues :
+    - 'hg tf' pour traduire VERS le français
+	- 'hg te' pour traduire VERS l'anglais
+	- 'hg tj' pour traduire VERS le japonais
+	- 'hg tl' pour traduire VERS le latin
   - (1.7) Il est désormais possible de faire des dons aux autres utilisateurs de Horigame, il suffit d'utiliser la commande 'hg give'
   - (1.7) Un cooldown à été appliqué, pour évité l'abus d'XP de Horigame et le DDoS des commandes.
   - (1.6) Horigame à été créé ! Il va rendre Horizon plus utile et dynamique, et vous permettra de vous amusez... Il suffit de commencer avec 'hg init'

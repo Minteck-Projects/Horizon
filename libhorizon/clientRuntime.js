@@ -14,9 +14,26 @@ const os = require('os');
 var cpumodel = ""
 let processram
 const talkedRecently = new Set();
+const projectpedia = require("projectpedia-js")
+let lstmsg
 
-let HorizonVer = "1.8"
-let LibhorizonVer = "0.5"
+let HorizonVer = "1.9"
+let LibhorizonVer = "0.6"
+
+let parsed0
+let parsed1
+let parsed2
+let parsed3
+let parsed4
+let parsed5
+let parsed6
+let parsed7
+let parsed8
+let parsed9
+let parsed10
+let parsed11
+let parsedop
+var maintenance = false
 
 const RawMessage = require('../features/rawMessage')
 const TestMode = require('../features/testMode')
@@ -24,32 +41,198 @@ const RestartBot = require('../features/restartBot')
 const SendLogs = require('../features/sendLogs')
 const SendCrashes = require('../features/sendCrashes')
 const VoiceChannel = require('../features/voiceChannel')
+//const Projectpedia = require('../features/projectpediaIntegration')
 const Horigame = require('../horigame/source')
 
 client.on('message', function (message) {
+    if (maintenance === false) {
     let commandUsed = Horigame.parse(message)
-});
+}});
 
 client.on('message', function (message) {
+    if (maintenance === true) {
+        if (message.content.startsWith(config.commandsPrefix) || message.content.startsWith("pp") || message.content.startsWith("hg") || message.content.startsWith("memdmp") || message.content.startsWith("mtnmode")) {
+            message.delete()
+            message.channel.send("⚠️ J'ai bien compris votre commande `" + message.content + "`, **" + message.author.username + "**, mais malheureusement, je ne peux pas la traiter car je suis actuellement en maintenance")
+        }
+    }
+})
+
+client.on('message', function (message) {
+    if (maintenance === false) {
+    if (message.content.startsWith("mtnmode")) {
+        if (message.author.username == "Minteck | ルカリオ") {
+            maintenance = true;
+            message.delete();
+            client.user.setActivity("🚨 En maintenance")
+            client.user.setStatus('dnd')
+            message.author.send(":rotating_light: **Horizon** est maintenant en maintenance. Redémarrez le manuellement depuis le serveur pour le sortir de maintenance...")
+    }}
+}});
+
+
+client.on('message', function (message) {
+    if (maintenance === false) {
     if (message.content.startsWith(config.commandsPrefix)) {
     if (talkedRecently.has(message.author.id)) {
         message.channel.send(":warning: N'allez pas si vite ! Recommencez dans quelques secondes...");
     } else {
-    let commandUsed = RawMessage.parse(message) ||
-    TestMode.parse(message) ||
+    let commandUsed = //Projectpedia.parse(message) ||
+    RawMessage.parse(message) ||
+    //TestMode.parse(message) ||
     RestartBot.parse(message) ||
     SendLogs.parse(message) ||
     SendCrashes.parse(message) ||
-    VoiceChannel.parse(message)
+    VoiceChannel.parse(message)// ||
+    //Projectpedia.parse(message)
     talkedRecently.add(message.author.id);
     setTimeout(() => {
       talkedRecently.delete(message.author.id);
     }, 5000);
 }
+}}})
+
+client.on('message', function (message) {
+    if (maintenance === false) {
+    if (message.content.startsWith("pp p")) {
+        if (message.author.username == "Minteck | ルカリオ" || message.author.username == "Horizon.Data") {
+            presence = client.user.presence.game
+            client.user.setActivity("Chargement en cours...")
+            client.user.setStatus("dnd")
+            projectpedia.parsePages();
+                    lstmsg = message
+                    setTimeout(function (message,presence) {
+                        var readyContent = projectpedia.pages();
+                        message = lstmsg
+                        client.user.setActivity(presence)
+                        client.user.setStatus("online")
+                        message.channel.send("```\nPages de Projectpédia dans l'espace de noms principal :\n" + readyContent + "\n```")
+                    }, 200)
+        }else{
+                  if (message.guild) { loginfo = "Rejet d'accès à l'utilisateur @" + message.author.username + "#" + message.author.tag + " (" + message.author.id + ") depuis le serveur " + message.guild.name + " (#" + message.channel.name + ")" + " | " + message.content } else { loginfo = "Rejet d'accès à l'utilisateur @" + message.author.tag + " (" + message.author.id + ") via messages privés | " + message.content }
+                  showLog();
+              }
+  }
+  if (message.content.startsWith("pp tp")) {
+    if (message.author.username == "Minteck | ルカリオ" || message.author.username == "Horizon.Data") {
+            presence = client.user.presence.game
+            client.user.setActivity("Chargement en cours...")
+            client.user.setStatus("dnd")        
+            projectpedia.parsePages
+                lstmsg = message
+                setTimeout(function (message) {
+                    parsed0 = projectpedia.pages();
+                    message = lstmsg
+                    projectpedia.parseNamespacePages(1);
+                    setTimeout(function (message) {
+                        message = lstmsg
+                        parsed1 = projectpedia.pagesInNamespace();
+                        projectpedia.parseNamespacePages(2);
+                        setTimeout(function (message) {
+                            message = lstmsg
+                            parsed2 = projectpedia.pagesInNamespace();
+                            projectpedia.parseNamespacePages(3);
+                            setTimeout(function (message) {
+                                message = lstmsg
+                                parsed3 = projectpedia.pagesInNamespace();
+                                projectpedia.parseNamespacePages(4);
+                                setTimeout(function (message) {
+                                    message = lstmsg
+                                    parsed4 = projectpedia.pagesInNamespace();
+                                    projectpedia.parseNamespacePages(5);
+                                    setTimeout(function (message) {
+                                        message = lstmsg
+                                        parsed5 = projectpedia.pagesInNamespace();
+                                        projectpedia.parseNamespacePages(6);
+                                        setTimeout(function (message) {
+                                            message = lstmsg
+                                            parsed6 = projectpedia.pagesInNamespace();
+                                            projectpedia.parseNamespacePages(7);
+                                            setTimeout(function (message) {
+                                                message = lstmsg
+                                                parsed7 = projectpedia.pagesInNamespace();
+                                                projectpedia.parseNamespacePages(8);
+                                                setTimeout(function (message) {
+                                                    message = lstmsg
+                                                    parsed8 = projectpedia.pagesInNamespace();
+                                                    projectpedia.parseNamespacePages(9);
+                                                    setTimeout(function (message) {
+                                                        message = lstmsg
+                                                        parsed9 = projectpedia.pagesInNamespace();
+                                                        projectpedia.parseNamespacePages(10);
+                                                        setTimeout(function (message) {
+                                                            message = lstmsg
+                                                            parsed10 = projectpedia.pagesInNamespace();
+                                                            projectpedia.parseNamespacePages(11);
+                                                            setTimeout(function (message) {
+                                                                message = lstmsg
+                                                                parsed11 = projectpedia.pagesInNamespace();
+                                                                //message.channel.send("```\nPages totales de Projectpédia (sauf espace de nom 10) :\n" + parsed0 + "\n" + parsed1)
+                                                                message.channel.send("```\nPages de Projectpédia :\n" + parsed0 + "\n```")
+                                                                setTimeout(function () {
+                                                                    message = lstmsg
+                                                                    message.channel.send("```\n" + parsed1 + "\n```")
+                                                                    setTimeout(function () {
+                                                                        message = lstmsg
+                                                                        message.channel.send("```\n" + parsed2 + "\n```")
+                                                                        setTimeout(function () {
+                                                                            message = lstmsg
+                                                                            message.channel.send("```\n" + parsed3 + "\n```")
+                                                                            setTimeout(function () {
+                                                                                message = lstmsg
+                                                                                message.channel.send("```\n" + parsed4 + "\n```")
+                                                                                setTimeout(function () {
+                                                                                    message = lstmsg
+                                                                                    message.channel.send("```\n" + parsed5 + "\n```")
+                                                                                    setTimeout(function () {
+                                                                                        message = lstmsg
+                                                                                        message.channel.send("```\n" + parsed6 + "\n```")
+                                                                                        setTimeout(function () {
+                                                                                            message = lstmsg
+                                                                                            message.channel.send("```\n" + parsed7 + "\n```")
+                                                                                            setTimeout(function () {
+                                                                                                message = lstmsg
+                                                                                                message.channel.send("```\n" + parsed8 + "\n```")
+                                                                                                setTimeout(function () {
+                                                                                                    message = lstmsg
+                                                                                                    message.channel.send("```\n" + parsed9 + "\n```")
+                                                                                                        setTimeout(function () {
+                                                                                                            message = lstmsg
+                                                                                                            message.channel.send("```\n" + parsed11 + "\n```")
+                                                                                                        },500)
+                                                                                                },500)
+                                                                                            },500)
+                                                                                        },500)
+                                                                                    },500)
+                                                                                },500)
+                                                                            },500)
+                                                                        },500)
+                                                                    },500)
+                                                                },500)
+                                                                client.user.setActivity(presence)
+                                                                client.user.setStatus("online")
+                                                            }, 200)
+                                                        }, 200)
+                                                    }, 200)
+                                                }, 200)
+                                            }, 200)
+                                        }, 200)
+                                    }, 200)
+                                }, 200)
+                            }, 200)
+                        }, 200)
+                    }, 200)
+                }, 2000)
+    }else{
+              if (message.guild) { loginfo = "Rejet d'accès à l'utilisateur @" + message.author.username + "#" + message.author.tag + " (" + message.author.id + ") depuis le serveur " + message.guild.name + " (#" + message.channel.name + ")" + " | " + message.content } else { loginfo = "Rejet d'accès à l'utilisateur @" + message.author.tag + " (" + message.author.id + ") via messages privés | " + message.content }
+              showLog();
+          }
+}
 }})
 
 client.on('message', function (message) {
-    if (config.enableRawMessages) {
+    if (maintenance === false) {
+    if (config.enableChangeGameActivity) {
         if (message.content.startsWith(config.commandsPrefix + config.commandsSuffix + 'g')) {
             if (message.author.username == "Minteck | ルカリオ" || message.author.username == "Horizon.Data") {
 				if (config.dynamicGameActivity == false) {
@@ -77,9 +260,10 @@ client.on('message', function (message) {
                   }
       }
 
-}});
+}}});
 
 client.on('message', function (msg) {
+    if (maintenance === false) {
 	if (msg.guild !== null) {
 	let HorizonDataId = "<@392012706279981066>"
 	let HorizonTestBotId = "<@546770319575089175>"
@@ -95,7 +279,7 @@ client.on('message', function (msg) {
 		}else{
 			guildMember.send("**__" + msg.author + "__ a mentionné __Horizon__ sur le serveur __" + msg.guild.name + "__, dans le salon __" + msg.channel + "__. Le message était :**\n\n" + msg.content + "\n```\nCela a pris approximativement " + client.ping + "ms.\nDemandé par " + msg.author + ", et c'est un Mega-Lucario !```")
 		}
-}}})
+}}}})
 
 Object.defineProperty(global, '__stack', {
     get: function() {
@@ -193,7 +377,7 @@ function showLog() {
             console.log(time + " [" + shard.id + "] : " + loginfo)
 }}
 
-client.on('ready', () => {
+client.on('ready', (ready) => {
     loginfo = "Connexion établie"
     showLog();
     if (config.testMode == false) {
@@ -208,11 +392,12 @@ client.on('ready', () => {
       testMode = true
       fs.writeFile("./config/mode.json", "{\n\"test\": true\n}")
     }
+    projectpedia.login(config.projectpediaUsername,config.projectpediaPassword);
 });
 
 function dga1() {
     //client.user.setActivity("Bonjour !");
-    client.user.setPresence({ game: { name: "Bonjour !", details: "Découvrez Horizon..." }, status: 'online', "game.type": "STREAMING" })
+    if (maintenance === false) client.user.setPresence({ game: { name: "Bonjour !", details: "Découvrez Horizon..." }, status: 'online', "game.type": "STREAMING" })
 	setTimeout(dga2, 10000);
 }
 
@@ -231,37 +416,37 @@ function dga2() {
     day = (day < 10 ? "0" : "") + day;
     var time = day + "/" + month + "/" + year;
     //client.user.setActivity(time);
-    client.user.setPresence({ game: { name: time, details: 'Nous sommes le ' + time }, status: 'online', "game.type": "WATCHING" })
+    if (maintenance === false) client.user.setPresence({ game: { name: time, details: 'Nous sommes le ' + time }, status: 'online', "game.type": "WATCHING" })
 	setTimeout(dga3, 10000);
 }
 
 function dga3() {
     //client.user.setActivity(HorizonVer + " - libhorizon " + LibhorizonVer);
-    client.user.setPresence({ game: { name: HorizonVer + ' - libhorizon ' + LibhorizonVer, details: 'Je suis en version ' + HorizonVer + ' !' }, status: 'online', "game.type": "LISTENING" })
+    if (maintenance === false) client.user.setPresence({ game: { name: HorizonVer + ' - libhorizon ' + LibhorizonVer, details: 'Je suis en version ' + HorizonVer + ' !' }, status: 'online', "game.type": "LISTENING" })
 	setTimeout(dga4, 10000);
 }
 
 function dga4() {
     //client.user.setActivity("Code : Minteck")
-    client.user.setPresence({ game: { name: 'Code : Minteck', details: 'Code écrit par Minteck' }, status: 'online', "game.type": "STREAMING" })
+    if (maintenance === false) client.user.setPresence({ game: { name: 'Code : Minteck', details: 'Code écrit par Minteck' }, status: 'online', "game.type": "STREAMING" })
 	setTimeout(dga5, 10000);
 }
 
 function dga5() {
     //client.user.setActivity("Idées : Horizon.Data")
-    client.user.setPresence({ game: { name: 'Idées : Horizon.Data', details: 'Idées données par Horizon.Data' }, status: 'online', "game.type": "STREAMING" })
+    if (maintenance === false) client.user.setPresence({ game: { name: 'Idées : Horizon.Data', details: 'Idées données par Horizon.Data' }, status: 'online', "game.type": "STREAMING" })
 	setTimeout(dga6, 10000);
 }
 
 function dga6() {
     //client.user.setActivity("#Plug²4Ever")
-    client.user.setPresence({ game: { name: '#Plug²4Ever', details: 'Je serai toujours sur ce serveur !' }, status: 'online', "game.type": "WATCHING"  })
+    if (maintenance === false) client.user.setPresence({ game: { name: '#Plug²4Ever', details: 'Je serai toujours sur ce serveur !' }, status: 'online', "game.type": "WATCHING"  })
 	setTimeout(dga7, 10000);
 }
 
 function dga7() {
     //client.user.setActivity("hg init")
-    client.user.setPresence({ game: { name: 'hg init', details: 'Commencez à jouer...' }, status: 'online', "game.type": "PLAYING" })
+    if (maintenance === false) client.user.setPresence({ game: { name: 'hg init', details: 'Commencez à jouer...' }, status: 'online', "game.type": "PLAYING" })
 	setTimeout(dga1, 10000);
 }
 
@@ -288,6 +473,7 @@ function propName(prop, value) {
 }
 
 client.on('message', function (message) {
+    if (maintenance === false) {
 	if (message.guild) {
     if (message.content.startsWith(config.commandsPrefix + config.commandsSuffix + 'd')) {
         if (config.enableDebugInfo) {
@@ -315,9 +501,10 @@ client.on('message', function (message) {
 				showLog();
             }
 }
-}}})
+}}}})
 
 client.on('message', function (message) {
+    if (maintenance === false) {
 	if (message.guild) {
     if (message.content.startsWith('memdmp')) {
         if (message.guild) {
@@ -339,7 +526,7 @@ client.on('message', function (message) {
             }else{
 				message.channel.send("```Only System Administrator can get Memory Dump info```")
             }
-}}}})
+}}}}})
 
 client.on('disconnect', function () {
     loginfo = "Erreur de communication. Redémarrage du client..."
