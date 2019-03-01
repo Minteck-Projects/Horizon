@@ -1,3 +1,6 @@
+Ces informations ne sont plus à jour, et une mise à jour est prévue prochainement. Si vous souhaitez nous suggérer des changements sur cette page, [créez un ticket](https://gitlab.com/minteck-projects/projects/horizon/issues)...
+<hr>
+
 # Horizon
 ## Qu'est-ce que Horizon ?
 Horizon est un Bot Discord (logiciel permettant d'automatiser certaines actions) qui peut être contrôlé via une commande, par **Horizon.Data** ou **Minteck**.
