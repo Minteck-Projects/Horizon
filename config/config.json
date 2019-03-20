@@ -1,6 +1,6 @@
 {
 
-    "token": "TokenIci",
+    "token": "token",
 	
     "testMode": false,
 	"keepLogs": true,
@@ -27,6 +27,6 @@
     "pionnerRoleID": "408348879243968512",
     "shardQty": 4,
 
-    "projectpediaUsername": "UtilisateurProjectpediaIci",
-    "projectpediaPassword": "MdpProjectpediaIci"
+    "projectpediaUsername": "login",
+    "projectpediaPassword": "password"
 }

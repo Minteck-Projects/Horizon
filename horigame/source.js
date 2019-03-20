@@ -13,6 +13,7 @@ let lstmsg
 const talkedRecently = new Set();
 const xpCooldown = new Set();
 const translate = require('@vitalets/google-translate-api');
+let editmsg
 
 
 module.exports = class Horigame extends Command {
@@ -62,7 +63,7 @@ module.exports = class Horigame extends Command {
                     try {
                         admin = db.getData("/game/" + message.author.id + "/admin");
                     } catch(error) {};
-                    if (admin === true) { var adminMsg = "\n\n:watch: **__Attention__, vous êtes un administrateur de Horigame !**" } else { var adminmsg = "" }
+                    if (admin === true) { var adminMsg = "\n\n:watch: **__Attention__, vous êtes un administrateur de Horigame !**" } else { var adminMsg = "" }
                     message.channel.send(":open_hands: **Bonjour " + message.author.username + ", voici vos statistiques :**"  + adminMsg +"\n\n:arrow_upper_right: **Niveau** : " + level + "\n:level_slider: **Points d'expérience pour ce niveau** : " + xp + "/500\n:up: **Total des points d'expérience** : " + totalXp + "\n:large_blue_diamond: **Diamants dans l'inventaire** : " + diamonds + "\n:large_orange_diamond: **Pépites d'or dans l'inventaire** : " + golds + "\n:flag_white: **Lingots de fer dans l'inventaire** : " + irons + "\n:pick:  **Planches de bois dans l'inventaire** : " + woods + "\n:milk: **Fioles d'expérience dans l'inventaire Bonus** : " + xpBottle + "\n:package: **Packs de *bois* dans l'inventaire Bonus** : " + woodPack + "\n:package: **Packs de *fer* dans l'inventaire Bonus** : " + ironPack + "\n:package: **Packs d'*or* dans l'inventaire Bonus** : " + goldPack)
                 }}else{
                     if (message.content == 'hg reset') {
@@ -81,8 +82,9 @@ module.exports = class Horigame extends Command {
                                 lstmsg = message
                                 initErr();
                             };
-                            message.channel.send(":file_cabinet: Le profil de **" + message.author.username + "** est en cours de réinitialisation, patientez...")
-                            db.push("/game/" + message.author.id + "/level", 0);
+                            editmsg = message
+                            message.channel.send(":file_cabinet: Le profil de **" + message.author.username + "** est en cours de réinitialisation, patientez...").then((message) => {
+                                db.push("/game/" + message.author.id + "/level", 0);
                             db.push("/game/" + message.author.id + "/xp", 20);
                             db.push("/game/" + message.author.id + "/objects/diamonds", 0);
                             db.push("/game/" + message.author.id + "/objects/irons", 0);
@@ -92,7 +94,8 @@ module.exports = class Horigame extends Command {
                             db.push("/game/" + message.author.id + "/bonus/ironPack", 0);
                             db.push("/game/" + message.author.id + "/bonus/goldPack", 0);
                             db.push("/game/" + message.author.id + "/bonus/woodPack", 0);
-                            message.channel.send(":white_check_mark: Le profil utilisateur de **" + message.author.username + "** a été restauré aux valeurs par défaut.")
+                            message.edit(":white_check_mark: Le profil utilisateur de **" + editmsg.author.username + "** a été restauré aux valeurs par défaut.")
+                            })
                         }else{
             if (message.content == 'hg reset --yes-i-know-what-im-doing') {
                 try {
@@ -414,6 +417,61 @@ module.exports = class Horigame extends Command {
                                 message.channel.send(":no_entry: **Désolé**, mais une erreur s'est produite :\n```\n" + err + "\n```");
                                 console.log(err);
                             });
+                            }else if (message.content.startsWith('hg help')) {
+                                message.channel.send(":question: **Que pouvons nous donc faire avec ~~Horizon~~ __Horigame__ ?**\n\nL'aide sera présentée ainsi :\n`hg [commande] [obligatoire:type] (facultatif:type)`\n     Détails de la commande\n     Éléments requis : `guild`\n\n__Aide :__\n`hg shop (identifiant:shopId)`\n     Permet d'acheter un objet dans la boutique Plug², ou de consulter les stocks\n     Éléments requis : `guild`,`profile`\n\n`hg stats (null:null)`\n     Affiche vos statistiques\n     Éléments requis : `guild`,`profile`\n\n`hg give [identifiant:giftId] [utilisateur:snowflake]`\n     Fait un don à un autre utilisateur\n     Éléments requis : `guild`,`profile`,`balance > 0`\n\n`hg t[langue:1charlang] [texte:string]`\n     Traduit un texte en une langue (`f` pour français, `e` pour anglais, `j` pour japonais, et `l` pour latin)\n     Éléments requis : `guild`,`googleTranslateApi`\n\n`hg redeem (null:null)`\n     Récupère les lots en attente\n     Éléments requis : `guild`,`profile`,`redeemablePacks > 0`\n\n`hg help (null:null)`\n     Affiche ce message d'aide\n     Éléments requis : `guild`\n\n`hg reset (*)`\n     Réinitialise votre profil\n     Éléments requis : `guild`,`profile`\n\n`hg init (null:null)`\n     Initialise votre profil utilisateur\n     Éléments requis : `guild`,`noProfile`\n\n`hg push [canal:pushchannel]`\n     Altère les préférences de notification\n     Éléments requis : `guild`,`profile`")
+                            }else if (message.content.startsWith('hg push')) {
+                                try {
+                                    var data = db.getData("/game/" + message.author.id);
+                                } catch(error) {
+                                    lstmsg = message
+                                    initErr();
+                                };
+                                if (data) {
+                                if (message.content == "hg push levels") {
+                                    try {
+                                        var pushLevels = db.getData("/game/" + message.author.id + "/push/levels")
+                                    } catch(err) {
+                                        var pushLevels = true
+                                    }
+                                    if (pushLevels === true) {
+                                        db.push("/game/" + message.author.id + "/push/levels", false)
+                                        message.channel.send(':no_bell: Paramètres de notifications modifiés : `' + message.author.id + '.push.levels` est passé à `false`')
+                                    }
+                                    if (pushLevels === false) {
+                                        db.push("/game/" + message.author.id + "/push/levels", true)
+                                        message.channel.send(':bell: Paramètres de notifications modifiés : `' + message.author.id + '.push.levels` est passé à `true`')
+                                    }
+                                } else if (message.content == "hg push gifts") {
+                                    try {
+                                        var pushLevels = db.getData("/game/" + message.author.id + "/push/gifts")
+                                    } catch(err) {
+                                        var pushLevels = true
+                                    }
+                                    if (pushLevels === true) {
+                                        db.push("/game/" + message.author.id + "/push/gifts", false)
+                                        message.channel.send(':no_bell: Paramètres de notifications modifiés : `' + message.author.id + '.push.gifts` est passé à `false`')
+                                    }
+                                    if (pushLevels === false) {
+                                        db.push("/game/" + message.author.id + "/push/gifts", true)
+                                        message.channel.send(':bell: Paramètres de notifications modifiés : `' + message.author.id + '.push.gifts` est passé à `true`')
+                                    }
+                                } else if (message.content == "hg push") {
+                                    message.channel.send("**`hg push` vous permet de gérer vos paramètres de notification de Horigame pour des canaux particuliers.**\n\n**Note :** Les notifications de Horigame vous sont envoyées par messages privés.\n\n__**Canaux de notification disponibles :**__\n`levels` - Messages lorsque vous passez un niveau\n`gifts` - Messages lorsque vous recevez des lots en cadeau.\n\nUtilisez `hg push [canal]` pour altérer la configuration.")
+                                } else {
+                                    let args = message.content.split(' ');
+                                    args.shift();
+                                    let text = args.join(' ')
+                                    args = text.split(' ');
+                                    args.shift();
+                                    text = args.join(' ')
+                                    message.channel.send(":no_entry: Le canal de notifications **" + text + "** n'a pas pu être trouvé. Utilisez `hg push` pour obtenir de l'aide... - `" + message.author.username + "`")
+                                }}
+                            }else if (message.content.startsWith('hg manga')) {
+                                if (message.author.id == "294910706250285056") {
+
+                                } else {
+                                    message.channel.send(':no_entry_sign: Actuellement, seul **Minteck** peut utiliser la commande `hg manga`')
+                                }
                             }else{
             message.channel.send(":no_entry_sign: **" + message.content + "** n'est pas reconnu en tant que commande interne de Horigame. Vérifiez l'orthographe et réessayez. - `" + message.author.username + "`")
 }}}}}}}}}}}}}}}}
@@ -437,7 +495,8 @@ if (data) {
         var planks = db.getData("/game/" + message.author.id + "/objects/woods");
         db.push("/game/" + message.author.id + "/objects/woods", planks + 15);
         var userLevel = db.getData("/game/" + message.author.id + "/level");
-        message.author.send(":tools: Salut **" + message.author.username + "**, tu es maintenant au **niveau " + userLevel + "** ! Félicitations ! *(et tu gagne 15 planches de bois)*")
+        try { var setting = db.getData("/game/" + message.author.id + "/push/levels") } catch(err) { var setting = true }
+        if (setting === true) { message.author.send(":tools: Salut **" + message.author.username + "**, tu es maintenant au **niveau " + userLevel + "** ! Félicitations ! *(et tu gagne 15 planches de bois)*") }
     }
 }}}}}}
 
@@ -446,7 +505,7 @@ function blockXpUp () {
 };
 
 function blockMessage() {
-    lstmsg.channel.send(":warning: N'allez pas si vite ! Recommencez dans quelques secondes...");
+    lstmsg.channel.send(":warning: Et oh ! Vous allez trop vite ! Ralentissez un peu...");
 };
 
 function initErr() {
@@ -454,7 +513,8 @@ function initErr() {
 };
 
 function initUser() {
-    lstmsg.channel.send(":clock1: Patientez... L'initialisation du profil utilisateur de **" + lstmsg.author.username + "** est en cours...")
+    editmsg = lstmsg
+    lstmsg.channel.send(":clock1: Patientez... L'initialisation du profil utilisateur de **" + lstmsg.author.username + "** est en cours...").then((message) => {
                 db.push("/game/" + lstmsg.author.id + "/level", 0);
                 db.push("/game/" + lstmsg.author.id + "/xp", 20);
                 db.push("/game/" + lstmsg.author.id + "/objects/diamonds", 0);
@@ -465,7 +525,8 @@ function initUser() {
                 db.push("/game/" + lstmsg.author.id + "/bonus/ironPack", 0);
                 db.push("/game/" + lstmsg.author.id + "/bonus/goldPack", 0);
                 db.push("/game/" + lstmsg.author.id + "/bonus/woodPack", 0);
-                lstmsg.channel.send(":white_check_mark: Votre profil utilisateur à été initialisé correctement, vous pouvez maintenant commencer à jouer ! - `" + lstmsg.author.username + "`")
+                message.edit(":white_check_mark: Votre profil utilisateur à été initialisé correctement, vous pouvez maintenant commencer à jouer ! - `" + editmsg.author.username + "`")
+            })
 }
 
 function checkShop() {
@@ -638,7 +699,8 @@ function checkGift() {
             }
             var commandId = getRandomArbitrary(100, 99999);
             message.channel.send(":white_check_mark: Votre don *#" + commandId + "* de **10 points d'expérience** pour **" + message.mentions.user.first().username + "** a été validé - `" + message.author.username + "`")
-            message.mentions.user.first().send("🔔 Vous avez reçu une **fiole d'expérience *(10 points d'expérience)*** de la part de **" + message.author.username + "**. Utilisez la commande `hg redeem` pour les récupérer...")
+            try { var setting = db.getData('/game/' + message.mentions.user.first().id + '/push/gifts') } catch(err) { var setting = true }
+            if (setting === true) { message.mentions.user.first().send("🔔 Vous avez reçu une **fiole d'expérience *(10 points d'expérience)*** de la part de **" + message.author.username + "**. Utilisez la commande `hg redeem` pour les récupérer...") }
             loginfo = "Commande #" + commandId + " de l'objet donation-" + selection + " effectuée par " + message.author.username + " validée"
             showLog();
         }else{

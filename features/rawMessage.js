@@ -6,7 +6,7 @@ var config = require('../config/config.json')
 const fs = require('fs');
 const os = require('os');
 const shard = new Discord.ShardClientUtil(client);
-const mode = require('../config/mode.json')
+const mode = require('../config/mode.json');
 
 module.exports = class RawMessage extends Command {
 

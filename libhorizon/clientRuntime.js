@@ -17,8 +17,8 @@ const talkedRecently = new Set();
 const projectpedia = require("projectpedia-js")
 let lstmsg
 
-let HorizonVer = "1.9"
-let LibhorizonVer = "0.6"
+let HorizonVer = "1.10"
+let LibhorizonVer = "0.7"
 
 let parsed0
 let parsed1
@@ -70,12 +70,11 @@ client.on('message', function (message) {
     }}
 }});
 
-
 client.on('message', function (message) {
     if (maintenance === false) {
     if (message.content.startsWith(config.commandsPrefix)) {
     if (talkedRecently.has(message.author.id)) {
-        message.channel.send(":warning: N'allez pas si vite ! Recommencez dans quelques secondes...");
+        message.channel.send(":warning: Et oh ! Vous allez trop vite ! Ralentissez un peu...");
     } else {
     let commandUsed = //Projectpedia.parse(message) ||
     RawMessage.parse(message) ||
@@ -386,11 +385,15 @@ client.on('ready', (ready) => {
 	  }else{
 		  dga1();
 	  }
-      fs.writeFile("./config/mode.json", "{\n\"test\": false\n}")
+      fs.writeFile("./config/mode.json", "{\n\"test\": false\n}", function () {
+          return;
+      })
     } else {
       client.user.setActivity("Horizon - Mode test").catch(console.error);
       testMode = true
-      fs.writeFile("./config/mode.json", "{\n\"test\": true\n}")
+      fs.writeFile("./config/mode.json", "{\n\"test\": true\n}", function () {
+          return;
+      })
     }
     projectpedia.login(config.projectpediaUsername,config.projectpediaPassword);
 });
@@ -446,7 +449,7 @@ function dga6() {
 
 function dga7() {
     //client.user.setActivity("hg init")
-    if (maintenance === false) client.user.setPresence({ game: { name: 'hg init', details: 'Commencez à jouer...' }, status: 'online', "game.type": "PLAYING" })
+    if (maintenance === false) client.user.setPresence({ game: { name: 'Essayez \'hg help\'', details: 'Commencez à jouer...' }, status: 'online', "game.type": "PLAYING" })
 	setTimeout(dga1, 10000);
 }
 
@@ -495,7 +498,7 @@ client.on('message', function (message) {
             //let cpumodel = os.cpus.model.toString
             const processram = process.memoryUsage().heapUsed / 1024 / 1024;
             const readableprocessram = Math.round(processram*100)/100
-			message.channel.send("```\nMais dis donc, tu es un petit Riolu toi !\nVoici quelques informations de déboggage qui peuvent t'être utiles durant ton chemin !\n\n                       Version d'Horizon : " + HorizonVer +"\n                   Version de libhorizon : " + LibhorizonVer + "\n                         Serveur courant : main-shared\n                   Canal de mises à jour : nightly\n                 Temps de fonctionnement : " + client.uptime + "ms\n                                  Avatar : " + client.user.displayAvatarURL + "\n                                  Créé à : " + client.user.createdTimestamp + "\n                      Identifiant du bot : " + client.user.id + "\n          Identifiant du dernier message : " + client.user.lastMessageID + "\nServeurs sur lesquels le bot est présent : " + client.guilds.size + "\n                        Temps de latence : " + client.pings + "ms" + " (moy. " + client.ping + "ms)\n                    Identifiant du Shard : " + shard.id + "\n                  Plate-forme du serveur : " + system + "\n              Version de l'OS du serveur : " + release + "\n                 Architecture du serveur : " + cpuarch + "\n                            Mémoire vive : " + readabletookram + " Mio occupés (dont " + readableprocessram + " Mio alloués à Horizon) sur " + readabletotalram + " Mio (" + readablefreeram + " Mio libres)\n                   Processeur du serveur : " + cpumodel + "\n                          Nom du serveur : " + message.guild.name  + "\n          Chemin vers l'îcone du serveur : " + message.guild.iconURL + "\n                   Membres de ce serveur : " + message.guild.memberCount + "\n                 Propriétaire du serveur : " + message.guild.owner.displayName + "\n                       Région du serveur : " + message.guild.region + "\n               Niv. de vérif. du serveur : " + message.guild.verificationLevel + "\n              Acronyme du nom du serveur : " + message.guild.nameAcronym + "\n                 Salon d'absence (vocal) : " + message.guild.afkChannel.name + "\n   Tps. avant dépl. dans le salon d'abs. : " + message.guild.afkTimeout + " sec.\n```")
+			message.channel.send("```\nMais dis donc, tu es un petit Riolu toi !\nVoici quelques informations de déboggage qui peuvent t'être utiles durant ton chemin !\n\n                       Version d'Horizon : " + HorizonVer +"\n                   Version de libhorizon : " + LibhorizonVer + "\n                         Serveur courant : main-shared\n                   Canal de mises à jour : nightly\n                 Temps de fonctionnement : " + client.uptime + "ms\n                                  Avatar : " + client.user.displayAvatarURL + "\n                                  Créé à : " + client.user.createdTimestamp + "\n                      Identifiant du bot : " + client.user.id + "\n          Identifiant du dernier message : " + client.user.lastMessageID + "\nServeurs sur lesquels le bot est présent : " + client.guilds.size + "\n                        Temps de latence : " + client.pings + "ms" + " (moy. " + client.ping + "ms)\n                    Identifiant du Shard : " + shard.id + "\n                  Plate-forme du serveur : " + system + "\n              Version de l'OS du serveur : " + release + "\n                 Architecture du serveur : " + cpuarch + "\n                            Mémoire vive : " + readabletookram + " Mio occupés (dont " + readableprocessram + " Mio alloués à Horizon) sur " + readabletotalram + " Mio (" + readablefreeram + " Mio libres)\n                          Nom du serveur : " + message.guild.name  + "\n          Chemin vers l'îcone du serveur : " + message.guild.iconURL + "\n                   Membres de ce serveur : " + message.guild.memberCount + "\n                 Propriétaire du serveur : " + message.guild.owner.displayName + "\n                       Région du serveur : " + message.guild.region + "\n               Niv. de vérif. du serveur : " + message.guild.verificationLevel + "\n              Acronyme du nom du serveur : " + message.guild.nameAcronym + "\n   Tps. avant dépl. dans le salon d'abs. : " + message.guild.afkTimeout + " sec.\n```")
             }else{
 				if (message.guild) { loginfo = "Rejet d'accès à l'utilisateur @" + message.author.username + "#" + message.author.tag + " (" + message.author.id + ") depuis le serveur " + message.guild.name + " (#" + message.channel.name + ")" + " | " + message.content } else { loginfo = "Rejet d'accès à l'utilisateur @" + message.author.tag + " (" + message.author.id + ") via messages privés | " + message.content }
 				showLog();
