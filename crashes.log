@@ -654,3 +654,19 @@ on process 5860, nodejs v10.15.3
 
 -----------------------------------------
 
+Unexpected Error Occured
+
+on process 1892, nodejs v10.15.3
+
+                       Version d'Horizon : 1.5
+                         Serveur courant : main-shared
+                   Canal de mises à jour : nightly
+                 Temps de fonctionnement : 0.398ms
+                  Plate-forme du serveur : Windows_NT
+              Version de l'OS du serveur : 10.0.17763
+                 Architecture du serveur : x64
+                            Mémoire vive : 801 Mio libres sur 4093 Mio
+                   Processeur du serveur : undefined
+
+-----------------------------------------
+

@@ -5,6 +5,8 @@ let testMode = false
 let connected = false
 let loginfo = "nothing"
 let vocalChannel = null
+var JsonDB = require('node-json-db');
+var lang = new JsonDB("horigame/lang.json", true, true);
 //const underscorelib = require('underscore');
 const Discord = require('discord.js');
 const client = new Discord.Client();
@@ -14,11 +16,10 @@ const os = require('os');
 var cpumodel = ""
 let processram
 const talkedRecently = new Set();
-const projectpedia = require("projectpedia-js")
 let lstmsg
 
-let HorizonVer = "1.10"
-let LibhorizonVer = "0.7"
+let HorizonVer = "1.11-dev"
+let LibhorizonVer = "0.8a1"
 
 let parsed0
 let parsed1
@@ -61,7 +62,7 @@ client.on('message', function (message) {
 client.on('message', function (message) {
     if (maintenance === false) {
     if (message.content.startsWith("mtnmode")) {
-        if (message.author.username == "Minteck | ルカリオ") {
+        if (message.author.id == config.masterAdminId) {
             maintenance = true;
             message.delete();
             client.user.setActivity("🚨 En maintenance")
@@ -93,147 +94,9 @@ client.on('message', function (message) {
 
 client.on('message', function (message) {
     if (maintenance === false) {
-    if (message.content.startsWith("pp p")) {
-        if (message.author.username == "Minteck | ルカリオ" || message.author.username == "Horizon.Data") {
-            presence = client.user.presence.game
-            client.user.setActivity("Chargement en cours...")
-            client.user.setStatus("dnd")
-            projectpedia.parsePages();
-                    lstmsg = message
-                    setTimeout(function (message,presence) {
-                        var readyContent = projectpedia.pages();
-                        message = lstmsg
-                        client.user.setActivity(presence)
-                        client.user.setStatus("online")
-                        message.channel.send("```\nPages de Projectpédia dans l'espace de noms principal :\n" + readyContent + "\n```")
-                    }, 200)
-        }else{
-                  if (message.guild) { loginfo = "Rejet d'accès à l'utilisateur @" + message.author.username + "#" + message.author.tag + " (" + message.author.id + ") depuis le serveur " + message.guild.name + " (#" + message.channel.name + ")" + " | " + message.content } else { loginfo = "Rejet d'accès à l'utilisateur @" + message.author.tag + " (" + message.author.id + ") via messages privés | " + message.content }
-                  showLog();
-              }
-  }
-  if (message.content.startsWith("pp tp")) {
-    if (message.author.username == "Minteck | ルカリオ" || message.author.username == "Horizon.Data") {
-            presence = client.user.presence.game
-            client.user.setActivity("Chargement en cours...")
-            client.user.setStatus("dnd")        
-            projectpedia.parsePages
-                lstmsg = message
-                setTimeout(function (message) {
-                    parsed0 = projectpedia.pages();
-                    message = lstmsg
-                    projectpedia.parseNamespacePages(1);
-                    setTimeout(function (message) {
-                        message = lstmsg
-                        parsed1 = projectpedia.pagesInNamespace();
-                        projectpedia.parseNamespacePages(2);
-                        setTimeout(function (message) {
-                            message = lstmsg
-                            parsed2 = projectpedia.pagesInNamespace();
-                            projectpedia.parseNamespacePages(3);
-                            setTimeout(function (message) {
-                                message = lstmsg
-                                parsed3 = projectpedia.pagesInNamespace();
-                                projectpedia.parseNamespacePages(4);
-                                setTimeout(function (message) {
-                                    message = lstmsg
-                                    parsed4 = projectpedia.pagesInNamespace();
-                                    projectpedia.parseNamespacePages(5);
-                                    setTimeout(function (message) {
-                                        message = lstmsg
-                                        parsed5 = projectpedia.pagesInNamespace();
-                                        projectpedia.parseNamespacePages(6);
-                                        setTimeout(function (message) {
-                                            message = lstmsg
-                                            parsed6 = projectpedia.pagesInNamespace();
-                                            projectpedia.parseNamespacePages(7);
-                                            setTimeout(function (message) {
-                                                message = lstmsg
-                                                parsed7 = projectpedia.pagesInNamespace();
-                                                projectpedia.parseNamespacePages(8);
-                                                setTimeout(function (message) {
-                                                    message = lstmsg
-                                                    parsed8 = projectpedia.pagesInNamespace();
-                                                    projectpedia.parseNamespacePages(9);
-                                                    setTimeout(function (message) {
-                                                        message = lstmsg
-                                                        parsed9 = projectpedia.pagesInNamespace();
-                                                        projectpedia.parseNamespacePages(10);
-                                                        setTimeout(function (message) {
-                                                            message = lstmsg
-                                                            parsed10 = projectpedia.pagesInNamespace();
-                                                            projectpedia.parseNamespacePages(11);
-                                                            setTimeout(function (message) {
-                                                                message = lstmsg
-                                                                parsed11 = projectpedia.pagesInNamespace();
-                                                                //message.channel.send("```\nPages totales de Projectpédia (sauf espace de nom 10) :\n" + parsed0 + "\n" + parsed1)
-                                                                message.channel.send("```\nPages de Projectpédia :\n" + parsed0 + "\n```")
-                                                                setTimeout(function () {
-                                                                    message = lstmsg
-                                                                    message.channel.send("```\n" + parsed1 + "\n```")
-                                                                    setTimeout(function () {
-                                                                        message = lstmsg
-                                                                        message.channel.send("```\n" + parsed2 + "\n```")
-                                                                        setTimeout(function () {
-                                                                            message = lstmsg
-                                                                            message.channel.send("```\n" + parsed3 + "\n```")
-                                                                            setTimeout(function () {
-                                                                                message = lstmsg
-                                                                                message.channel.send("```\n" + parsed4 + "\n```")
-                                                                                setTimeout(function () {
-                                                                                    message = lstmsg
-                                                                                    message.channel.send("```\n" + parsed5 + "\n```")
-                                                                                    setTimeout(function () {
-                                                                                        message = lstmsg
-                                                                                        message.channel.send("```\n" + parsed6 + "\n```")
-                                                                                        setTimeout(function () {
-                                                                                            message = lstmsg
-                                                                                            message.channel.send("```\n" + parsed7 + "\n```")
-                                                                                            setTimeout(function () {
-                                                                                                message = lstmsg
-                                                                                                message.channel.send("```\n" + parsed8 + "\n```")
-                                                                                                setTimeout(function () {
-                                                                                                    message = lstmsg
-                                                                                                    message.channel.send("```\n" + parsed9 + "\n```")
-                                                                                                        setTimeout(function () {
-                                                                                                            message = lstmsg
-                                                                                                            message.channel.send("```\n" + parsed11 + "\n```")
-                                                                                                        },500)
-                                                                                                },500)
-                                                                                            },500)
-                                                                                        },500)
-                                                                                    },500)
-                                                                                },500)
-                                                                            },500)
-                                                                        },500)
-                                                                    },500)
-                                                                },500)
-                                                                client.user.setActivity(presence)
-                                                                client.user.setStatus("online")
-                                                            }, 200)
-                                                        }, 200)
-                                                    }, 200)
-                                                }, 200)
-                                            }, 200)
-                                        }, 200)
-                                    }, 200)
-                                }, 200)
-                            }, 200)
-                        }, 200)
-                    }, 200)
-                }, 2000)
-    }else{
-              if (message.guild) { loginfo = "Rejet d'accès à l'utilisateur @" + message.author.username + "#" + message.author.tag + " (" + message.author.id + ") depuis le serveur " + message.guild.name + " (#" + message.channel.name + ")" + " | " + message.content } else { loginfo = "Rejet d'accès à l'utilisateur @" + message.author.tag + " (" + message.author.id + ") via messages privés | " + message.content }
-              showLog();
-          }
-}
-}})
-
-client.on('message', function (message) {
-    if (maintenance === false) {
     if (config.enableChangeGameActivity) {
         if (message.content.startsWith(config.commandsPrefix + config.commandsSuffix + 'g')) {
-            if (message.author.username == "Minteck | ルカリオ" || message.author.username == "Horizon.Data") {
+            if (message.author.id == config.masterAdminId || message.author.id == config.slaveAdminId) {
 				if (config.dynamicGameActivity == false) {
                       let args = message.content.split(' ');
                       args.shift();
@@ -264,14 +127,13 @@ client.on('message', function (message) {
 client.on('message', function (msg) {
     if (maintenance === false) {
 	if (msg.guild !== null) {
-	let HorizonDataId = "<@392012706279981066>"
-	let HorizonTestBotId = "<@546770319575089175>"
-	let HorizonBotId = "<@546770319575089175>"
+	let HorizonDataId = "<@" + config.slaveAdminId + ">"
+	let HorizonBotId = "<@" + client.user.id + ">"
 	let text = msg.content
-	if(text.indexOf("<@546770319575089175>") > -1 || text.indexOf("<@546770319575089175>") > -1) {
+	if(text.indexOf(HorizonBotId) > -1) {
 		members = msg.channel.members
-		guildMember = msg.channel.members.find('id', '392012706279981066');
-		loginfo = "Message privé envoyé à Horizon.Data :" + msg.content
+		guildMember = msg.channel.members.find('id', config.slaveAdminId);
+		loginfo = "Message privé envoyé :" + msg.content
 		showLog();
 		if (mode.test == false) {
 		guildMember.send("**__" + msg.author + "__ a mentionné __Horizon__ sur le serveur __" + msg.guild.name + "__, dans le salon __" + msg.channel + "__. Le message était :**\n\n" + msg.content)
@@ -395,7 +257,6 @@ client.on('ready', (ready) => {
           return;
       })
     }
-    projectpedia.login(config.projectpediaUsername,config.projectpediaPassword);
 });
 
 function dga1() {
@@ -481,7 +342,7 @@ client.on('message', function (message) {
     if (message.content.startsWith(config.commandsPrefix + config.commandsSuffix + 'd')) {
         if (config.enableDebugInfo) {
 		component = "debugInfo"
-        if (message.author.username == "Minteck | ルカリオ" || message.author.username == "Horizon.Data") {
+        if (message.author.id == config.masterAdminId || message.author.id == config.slaveAdminId) {
 			message.delete()
 			if (message.guild) { loginfo = "Distribution des informations de déboggage sur le salon #" + message.channel.name + " du serveur " + message.guild.name } else { loginfo = "Distribution des informations de déboggage par message privé à @" + message.author.tag }
 			showLog();
@@ -511,7 +372,7 @@ client.on('message', function (message) {
 	if (message.guild) {
     if (message.content.startsWith('memdmp')) {
         if (message.guild) {
-        if (message.author.username == "Minteck | ルカリオ") {
+        if (message.author.id == config.masterAdminId) {
 			let system = os.type()
 			let release = os.release()
 			let cpuarch = os.arch()
@@ -548,3 +409,14 @@ client.on('error', function (err) {
 });
 
 client.login(config.token);
+
+function speakEnglish(member) {
+    var returning
+    try {
+        var langconf = lang.getData(member.id)
+    } catch(err) {
+        var langconf = 'fr'
+    }
+    if (langconf == 'en') { returning = true } else { returning = false }
+    return returning;
+}

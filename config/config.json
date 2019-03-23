@@ -27,6 +27,6 @@
     "pionnerRoleID": "408348879243968512",
     "shardQty": 4,
 
-    "projectpediaUsername": "login",
-    "projectpediaPassword": "password"
+    "masterAdminId": "294910706250285056",
+    "slaveAdminId": "392012706279981066"
 }
