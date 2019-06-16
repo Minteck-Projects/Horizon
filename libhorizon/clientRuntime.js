@@ -9,7 +9,7 @@ var JsonDB = require('node-json-db');
 var lang = new JsonDB("horigame/lang.json", true, true);
 //const underscorelib = require('underscore');
 const Discord = require('discord.js');
-const client = new Discord.Client();
+global.client = new Discord.Client();
 const shard = new Discord.ShardClientUtil(client);
 const fs = require('fs');
 const os = require('os');
@@ -18,8 +18,8 @@ let processram
 const talkedRecently = new Set();
 let lstmsg
 
-let HorizonVer = "1.11-dev"
-let LibhorizonVer = "0.8a1"
+global.HorizonVer = "1.12"
+global.LibhorizonVer = "0.9"
 
 let parsed0
 let parsed1
@@ -41,6 +41,7 @@ const TestMode = require('../features/testMode')
 const RestartBot = require('../features/restartBot')
 const SendLogs = require('../features/sendLogs')
 const SendCrashes = require('../features/sendCrashes')
+const EmbedExplain = require('../features/embedExplain')
 const VoiceChannel = require('../features/voiceChannel')
 //const Projectpedia = require('../features/projectpediaIntegration')
 const Horigame = require('../horigame/source')
@@ -83,6 +84,7 @@ client.on('message', function (message) {
     RestartBot.parse(message) ||
     SendLogs.parse(message) ||
     SendCrashes.parse(message) ||
+    EmbedExplain.parse(message,client) ||
     VoiceChannel.parse(message)// ||
     //Projectpedia.parse(message)
     talkedRecently.add(message.author.id);
@@ -239,6 +241,7 @@ function showLog() {
 }}
 
 client.on('ready', (ready) => {
+    global.HorizonAvatar = client.user.avatar
     loginfo = "Connexion établie"
     showLog();
     if (config.testMode == false) {

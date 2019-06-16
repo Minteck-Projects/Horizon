@@ -15,6 +15,7 @@
     "crashRpPath": "./crashes.log",
     
     "enableVoiceChannel": true,
+    "enableEmbedExplain": true,
     "enableChangeGameActivity": true,
     "enableRawMessages": true,
     "enableActionCancel": true,

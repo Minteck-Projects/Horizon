@@ -17,13 +17,13 @@
             }
         },
         "294910706250285056": {
-            "level": 6,
-            "xp": 0,
+            "level": 7,
+            "xp": 300,
             "objects": {
                 "diamonds": 1,
                 "irons": 0,
                 "golds": 0,
-                "woods": 999999884
+                "woods": 999999829
             },
             "bonus": {
                 "xpBottle": 0,
@@ -38,13 +38,13 @@
             }
         },
         "392012706279981066": {
-            "level": 50000,
-            "xp": 370,
+            "level": 50001,
+            "xp": 70,
             "objects": {
                 "diamonds": 1,
                 "irons": 1,
                 "golds": 0,
-                "woods": 999999869
+                "woods": 999999884
             },
             "bonus": {
                 "xpBottle": 0,
@@ -67,7 +67,7 @@
                 "xpBottle": 0,
                 "ironPack": 0,
                 "goldPack": 0,
-                "woodPack": 0
+                "woodPack": 4
             }
         },
         "451398869566357504": {
@@ -88,7 +88,7 @@
         },
         "470606272761430021": {
             "level": 0,
-            "xp": 70,
+            "xp": 90,
             "objects": {
                 "diamonds": 0,
                 "irons": 3,
@@ -104,12 +104,12 @@
         },
         "546770319575089175": {
             "level": 0,
-            "xp": 110,
+            "xp": 210,
             "objects": {
                 "diamonds": 0,
                 "irons": 0,
                 "golds": 0,
-                "woods": 5
+                "woods": 35
             },
             "bonus": {
                 "xpBottle": 0,
