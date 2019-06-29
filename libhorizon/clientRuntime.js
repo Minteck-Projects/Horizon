@@ -18,8 +18,9 @@ let processram
 const talkedRecently = new Set();
 let lstmsg
 
-global.HorizonVer = "1.12"
+global.HorizonVer = "1.12.1"
 global.LibhorizonVer = "0.9"
+global.HorigameVer = "1.3"
 
 let parsed0
 let parsed1

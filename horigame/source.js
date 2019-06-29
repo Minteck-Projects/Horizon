@@ -1340,8 +1340,7 @@ module.exports = class Horigame extends Command {
                                 if (speakEnglish(message.author)) { message.channel.send({embed: {
                                     // color: 0x33cc33,
                                     author: {
-                                        name: "Hello there, I'm Horizon!",
-                                        icon_url: HorizonAvatar
+                                        name: "Hello there, I'm Horizon!"
                                     },
                                     title: "I'd like to teach you about Horigame!",
                                     description: "Horigame is a level-reward game were you can buy great perks with the money you get each level you up.\nEach command starts with `hg`!\n\nBut let's see the list of commands!",
@@ -1411,8 +1410,7 @@ module.exports = class Horigame extends Command {
                                 }}) } else { message.channel.send({embed: {
                                         // color: 0x33cc33,
                                         author: {
-                                            name: "Coucou tout le monde, moi c'est Horizon !",
-                                            icon_url: HorizonAvatar
+                                            name: "Coucou tout le monde, moi c'est Horizon !"
                                         },
                                         title: "Je suis là pour vous apprendre à utiliser Horigame !",
                                         description: "Horigame est un jeu de financement participatif virtuel où vous pouvez acheter des effets cool sur le serveur avec l'argent que vous gagnez à chaque montée de niveau.\nToutes les commandes commencent par `hg` !\n\nMais, voyons-en la liste :",
@@ -1718,7 +1716,7 @@ module.exports = class Horigame extends Command {
                 description: "Horizon is a Discord bot made by two students on their free time.",
                 fields: [{
                     name: "Versions",
-                    value: "Horizon Version: " + HorizonVer + "\nlibhorizon Version: " + LibhorizonVer + "\nNode Version: " + process.version.replace("v","")
+                    value: "Horizon Version: " + HorizonVer + "\nlibhorizon Version: " + LibhorizonVer + "\nHorigame Version: " + HorigameVer + "\nNode Version: " + process.version.replace("v","")
                 },
                 {
                     name: "Credits",
@@ -1735,7 +1733,7 @@ module.exports = class Horigame extends Command {
                 description: "Horizon est un bot Discord créé par deux étudiants sur leur temps libre.",
                 fields: [{
                     name: "Versions",
-                    value: "Version d'Horizon : " + HorizonVer + "\nVersion de libhorizon : " + LibhorizonVer + "\nVersion de Node: " + process.version.replace("v","")
+                    value: "Version d'Horizon : " + HorizonVer + "\nVersion de libhorizon : " + LibhorizonVer + "\nVersion d'Horigame: " + HorigameVer + "\nVersion de Node: " + process.version.replace("v","")
                 },
                 {
                     name: "Crédits",
