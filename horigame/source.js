@@ -1,6 +1,5 @@
 const Discord = require('discord.js')
 const client = new Discord.Client()
-const Command = require('../libhorizon/commandRt')
 let loginfo = "nothing"
 var config = require('../config/config.json')
 const fs = require('fs');
@@ -15,14 +14,31 @@ const talkedRecently = new Set();
 const xpCooldown = new Set();
 const translate = require('@vitalets/google-translate-api');
 let editmsg
+let lstmsgpx
 
-
-module.exports = class Horigame extends Command {
-
-    static match(message) {
+module.exports.parse = function (message,ping) {
         if (config.enableHorigame) {
             if (message.guild) {
-            if (message.content.startsWith("hg ")) {
+                if (message.content.startsWith("hg ")) {
+                    if (speakEnglish(message.author)) {
+                        message.channel.send({embed: {
+                            color: 0xffcc00,
+                            description: "Since Horizon 1.13, the prefix is now `=` and not `hg`.",
+                            footer: {
+                                text: "This notice will be removed on Horizon 1.15 - Horizon " + HorizonVer + " - " + message.author.username
+                            }
+                        }})
+                    } else {
+                        message.channel.send({embed: {
+                            color: 0xffcc00,
+                            description: "Depuis Horizon 1.13, le préfixe est maintenant `=` et non `hg`.",
+                            footer: {
+                                text: "Ce message sera retiré dans Horizon 1.15 - Horizon " + HorizonVer + " - " + message.author.username
+                            }
+                        }})
+                    }
+                }
+            if (message.content.startsWith("=")) {
                 if (talkedRecently.has(message.author.id)) {
                     lstmsg = message
                     blockMessage();
@@ -31,7 +47,7 @@ module.exports = class Horigame extends Command {
                 setTimeout(() => {
                 talkedRecently.delete(message.author.id);
                 }, 5000);
-            if (message.content == 'hg init') {
+            if (message.content == '=init') {
                 try {
                     var data = db.getData("/game/" + message.author.id);
                 } catch(error) {
@@ -39,14 +55,14 @@ module.exports = class Horigame extends Command {
                     initUser();
                 };
                 if (data) {
-                    // if (speakEnglish(message.author)) { message.channel.send(":no_entry: **" + message.author.username + "**'s profile already exists. Use `hg reset` to reset it") } else { message.channel.send(":no_entry: Le profil utilisateur de **" + message.author.username + "** existe déjà. Utilisez `hg reset` pour le réinitialiser") }
+                    // if (speakEnglish(message.author)) { message.channel.send(":no_entry: **" + message.author.username + "**'s profile already exists. Use `=reset` to reset it") } else { message.channel.send(":no_entry: Le profil utilisateur de **" + message.author.username + "** existe déjà. Utilisez `=reset` pour le réinitialiser") }
                     if (speakEnglish(message.author)) { message.channel.send({embed: {
                         color: 0xff0000,
                         author: {
                             name: "Horigame"
                         },
                         title: "Error",
-                        description: ":no_entry: Your profile already exists, use `hg reset` to reset it.",
+                        description: ":no_entry: Your profile already exists, use `=reset` to reset it.",
                         footer: {
                             text: "Version " + HorizonVer + " - " + message.author.username
                         }
@@ -56,13 +72,13 @@ module.exports = class Horigame extends Command {
                             name: "Horigame"
                         },
                         title: "Erreur",
-                        description: ":no_entry: Votre profil existe déjà, utilisez `hg reset` pour le réinitialiser.",
+                        description: ":no_entry: Votre profil existe déjà, utilisez `=reset` pour le réinitialiser.",
                         footer: {
                             text: "Version " + HorizonVer + " - " + message.author.username
                         }
                     }}) }
             }}else{
-                if (message.content == 'hg stats') {
+                if (message.content == '=stats') {
                     try {
                         var data = db.getData("/game/" + message.author.id);
                     } catch(error) {
@@ -197,21 +213,21 @@ module.exports = class Horigame extends Command {
                         }
                     }}) }
                 }}else{
-                    if (message.content == 'hg reset') {
+                    if (message.content == '=reset') {
                         try {
                             var data = db.getData("/game/" + message.author.id);
                         } catch(error) {
                             lstmsg = message
                             initErr();
                         };
-                        // if (speakEnglish(message.author)) { message.channel.send(":warning: You are going to reset **" + message.author.username + "**'s user profile. This cannot __cannot be undone__. **__BE SURE OF WHAT YOU'RE DOING !!!__**. Pour continuer tout de même, envoyez `hg reset --yes-i-know-what-im-doing`") } else { message.channel.send(":warning: Vous vous apprêtez à réinitialiser le profil utilisateur de **" + message.author.username + "**. Cette action est __irréversible__. **__SOYEZ BIEN SUR DE CE QUE VOUS FAITES !!!__**. Pour continuer tout de même, envoyez `hg reset --yes-i-know-what-im-doing`") }
+                        // if (speakEnglish(message.author)) { message.channel.send(":warning: You are going to reset **" + message.author.username + "**'s user profile. This cannot __cannot be undone__. **__BE SURE OF WHAT YOU'RE DOING !!!__**. Pour continuer tout de même, envoyez `=reset --yes-i-know-what-im-doing`") } else { message.channel.send(":warning: Vous vous apprêtez à réinitialiser le profil utilisateur de **" + message.author.username + "**. Cette action est __irréversible__. **__SOYEZ BIEN SUR DE CE QUE VOUS FAITES !!!__**. Pour continuer tout de même, envoyez `=reset --yes-i-know-what-im-doing`") }
                         if (speakEnglish(message.author)) { message.channel.send({embed: {
                             color: 0xffcc00,
                             author: {
                                 name: "Horigame"
                             },
                             title: ":warning: Warning!",
-                            description: "Resetting your profile to factory settings is a **dangerous** thing, and **__cannot be undone__**.\n\nEnter the `hg reset --yes-i-know-what-im-doing` command to continue.",
+                            description: "Resetting your profile to factory settings is a **dangerous** thing, and **__cannot be undone__**.\n\nEnter the `=reset --yes-i-know-what-im-doing` command to continue.",
                             footer: {
                                 text: "Version " + HorizonVer + " - " + message.author.username
                             }
@@ -221,13 +237,13 @@ module.exports = class Horigame extends Command {
                                 name: "Horigame"
                             },
                             title: ":warning: Avertissement !",
-                            description: "Réinitialiser votre profil aux réglages d'usine est une action **dangeureuse**, qui est **irréversible**.\n\nEntrez la commande `hg reset --yes-i-know-what-im-doing` pour continuer.",
+                            description: "Réinitialiser votre profil aux réglages d'usine est une action **dangeureuse**, qui est **irréversible**.\n\nEntrez la commande `=reset --yes-i-know-what-im-doing` pour continuer.",
                             footer: {
                                 text: "Version " + HorizonVer + " - " + message.author.username
                             }
                         }}) }
                     }else{
-            if (message.content == 'hg reset --yes-i-know-what-im-doing') {
+            if (message.content == '=reset --yes-i-know-what-im-doing') {
                 try {
                     var data = db.getData("/game/" + message.author.id);
                 } catch(error) {
@@ -300,7 +316,7 @@ module.exports = class Horigame extends Command {
                 }})
                 }) }
             }else{
-                if (message.content == 'hg shop') {
+                if (message.content == '=shop') {
                     try {
                         var data = db.getData("/game/" + message.author.id);
                     } catch(error) {
@@ -313,7 +329,7 @@ module.exports = class Horigame extends Command {
                     var irons = db.getData("/game/" + message.author.id + "/objects/irons")
                     var woods = db.getData("/game/" + message.author.id + "/objects/woods")
                     var xp = db.getData("/game/" + message.author.id + "/xp")
-                    // if (speakEnglish(message.author)) { message.channel.send(":shopping_bags: **Welcome to Plug² shop, " + message.author.username + "! Here is what we have right now:**\n\n:shopping_cart: **On the shelf:**\n1 :: `5⛏` :: 1 iron ingot\n2 :: `5🏳️` :: 1 gold nugget\n3 :: `5🔶` :: 1 diamond\n4 :: `3🔷` :: Pionnier role\n\n:gift: **Make a gift:**\n1 :: `10⛏` :: Gift 10 wooden planks\n2 :: `10🏳️` :: Gift 10 iron ingots\n3 :: `10🔶` :: Gift 10 gold nuggets\n4 :: `10🎚` :: Gift 10 XP points\n\n:moneybag: **Your balance:**\n     :level_slider: **XP points for current level**: " + xp + "/500\n     :large_blue_diamond: **Diamonds**: " + diamonds + "\n     :large_orange_diamond: **Gold nuggets**: " + golds + "\n     :flag_white: **Iron ingots**: " + irons + "\n     :pick: **Wooden planks**: " + woods + "\n\n**Commands:**\nBuy a thing: `hg shop [ElementIdentifier]`\nMake a gift: `hg give [GiftIdentifier] [UserPing]`\nRedeem awaiting packages: `hg redeem`") } else { message.channel.send(":shopping_bags: **Bienvenue dans la boutique Plug², " + message.author.username + " ! Voici les articles que nous avons actuellement :**\n\n:shopping_cart: **En stock :**\n1 :: `5⛏` :: 1 lingot de fer\n2 :: `5🏳️` :: 1 pépite d'or\n3 :: `5🔶` :: 1 diamant\n4 :: `3🔷` :: Grade Pionnier\n\n:gift: **Donner en cadeau :**\n1 :: `10⛏` :: Donner 10 planches de bois\n2 :: `10🏳️` :: Donner 10 lingots de fer\n3 :: `10🔶` :: Donner 10 pépites d'or\n4 :: `10🎚` :: Donner 10 points d'expérience\n\n:moneybag: **Votre solde :**\n     :level_slider: **Points d'expérience pour le niveau actuel** : " + xp + "/500\n     :large_blue_diamond: **Diamants** : " + diamonds + "\n     :large_orange_diamond: **Pépites d'or** : " + golds + "\n     :flag_white: **Lingots de fer** : " + irons + "\n     :pick: **Planches de bois** : " + woods + "\n\n**Commandes :**\nAcheter un article : `hg shop [IdentifiantArticle]`\nFaire un cadeau : `hg give [IdentifiantCadeau] [MentionUtilisateur]`\nRécupérer les cadeaux : `hg redeem`") }
+                    // if (speakEnglish(message.author)) { message.channel.send(":shopping_bags: **Welcome to Plug² shop, " + message.author.username + "! Here is what we have right now:**\n\n:shopping_cart: **On the shelf:**\n1 :: `5⛏` :: 1 iron ingot\n2 :: `5🏳️` :: 1 gold nugget\n3 :: `5🔶` :: 1 diamond\n4 :: `3🔷` :: Pionnier role\n\n:gift: **Make a gift:**\n1 :: `10⛏` :: Gift 10 wooden planks\n2 :: `10🏳️` :: Gift 10 iron ingots\n3 :: `10🔶` :: Gift 10 gold nuggets\n4 :: `10🎚` :: Gift 10 XP points\n\n:moneybag: **Your balance:**\n     :level_slider: **XP points for current level**: " + xp + "/500\n     :large_blue_diamond: **Diamonds**: " + diamonds + "\n     :large_orange_diamond: **Gold nuggets**: " + golds + "\n     :flag_white: **Iron ingots**: " + irons + "\n     :pick: **Wooden planks**: " + woods + "\n\n**Commands:**\nBuy a thing: `=shop [ElementIdentifier]`\nMake a gift: `=give [GiftIdentifier] [UserPing]`\nRedeem awaiting packages: `=redeem`") } else { message.channel.send(":shopping_bags: **Bienvenue dans la boutique Plug², " + message.author.username + " ! Voici les articles que nous avons actuellement :**\n\n:shopping_cart: **En stock :**\n1 :: `5⛏` :: 1 lingot de fer\n2 :: `5🏳️` :: 1 pépite d'or\n3 :: `5🔶` :: 1 diamant\n4 :: `3🔷` :: Grade Pionnier\n\n:gift: **Donner en cadeau :**\n1 :: `10⛏` :: Donner 10 planches de bois\n2 :: `10🏳️` :: Donner 10 lingots de fer\n3 :: `10🔶` :: Donner 10 pépites d'or\n4 :: `10🎚` :: Donner 10 points d'expérience\n\n:moneybag: **Votre solde :**\n     :level_slider: **Points d'expérience pour le niveau actuel** : " + xp + "/500\n     :large_blue_diamond: **Diamants** : " + diamonds + "\n     :large_orange_diamond: **Pépites d'or** : " + golds + "\n     :flag_white: **Lingots de fer** : " + irons + "\n     :pick: **Planches de bois** : " + woods + "\n\n**Commandes :**\nAcheter un article : `=shop [IdentifiantArticle]`\nFaire un cadeau : `=give [IdentifiantCadeau] [MentionUtilisateur]`\nRécupérer les cadeaux : `=redeem`") }
                     if (speakEnglish(message.author)) { message.channel.send({embed: {
                         color: 0x33cc33,
                         author: {
@@ -352,22 +368,22 @@ module.exports = class Horigame extends Command {
                         }
                     }}) }
                 }}else{
-                if (message.content.startsWith("hg shop ")) {
+                if (message.content.startsWith("=shop ")) {
                     lstmsg = message
                     checkShop();
                 }else{
-                    if (message.content.startsWith("hg give ")) {
+                    if (message.content.startsWith("=give ")) {
                         lstmsg = message
                         checkGift();
                     }else{
-                        if (message.content == 'hg give') {
-                            // if (speakEnglish(message.author)) { message.channel.send(":gift: **`hg give` is used to donate to an user**\n\n**Syntax:**\n       `hg give <GiftIdentifier> <UserPing>`\n\n**Conditions:**\n       **1.** Gift identifier needs to be valid. You can use `hg shop` to see more...\n       **2.** User needs to be on this server\n       **3.** User needs to have initialized its profile") } else { message.channel.send(":gift: **`hg give` permet de faire un don à un membre**\n\n**Syntaxe :**\n       `hg give <IdentifiantCadeau> <MentionUtilisateur>`\n\n**Conditions :**\n       **1.** L'identifiant cadeau doit être valide. Vous pouvez utiliser `hg shop` pour en savoir plus...\n       **2.** L'utilisateur doit être présent sur le serveur\n       **3.** L'utilisateur doit déjà avoir initialisé son profil") }
+                        if (message.content == '=give') {
+                            // if (speakEnglish(message.author)) { message.channel.send(":gift: **`=give` is used to donate to an user**\n\n**Syntax:**\n       `=give <GiftIdentifier> <UserPing>`\n\n**Conditions:**\n       **1.** Gift identifier needs to be valid. You can use `=shop` to see more...\n       **2.** User needs to be on this server\n       **3.** User needs to have initialized its profile") } else { message.channel.send(":gift: **`=give` permet de faire un don à un membre**\n\n**Syntaxe :**\n       `=give <IdentifiantCadeau> <MentionUtilisateur>`\n\n**Conditions :**\n       **1.** L'identifiant cadeau doit être valide. Vous pouvez utiliser `=shop` pour en savoir plus...\n       **2.** L'utilisateur doit être présent sur le serveur\n       **3.** L'utilisateur doit déjà avoir initialisé son profil") }
                             if (speakEnglish(message.author)) { message.channel.send({embed: {
                                 // color: 0x33cc33,
                                 author: {
                                     name: "Horigame"
                                 },
-                                title: ":gift: `hg give`",
+                                title: ":gift: `=give`",
                                 description: "This command is used to make a gift to another user",
                                 fields: [{
                                     name: "Conditions",
@@ -375,7 +391,7 @@ module.exports = class Horigame extends Command {
                                 },
                                 {
                                     name: "Syntax",
-                                    value: "`hg give [gift identifier] [user @-ing]`"
+                                    value: "`=give [gift identifier] [user @-ing]`"
                                 }],
                                 footer: {
                                     text: "Version " + HorizonVer + " - " + message.author.username
@@ -385,7 +401,7 @@ module.exports = class Horigame extends Command {
                                 author: {
                                     name: "Horigame"
                                 },
-                                title: ":gift: `hg give`",
+                                title: ":gift: `=give`",
                                 description: "Cette commande est utilisée pour faire un cadeau à un autre membre",
                                 fields: [{
                                     name: "Conditions",
@@ -393,14 +409,14 @@ module.exports = class Horigame extends Command {
                                 },
                                 {
                                     name: "Syntaxe",
-                                    value: "`hg give [identifiant cadeau] [mention utilisateur]`"
+                                    value: "`=give [identifiant cadeau] [mention utilisateur]`"
                                 }],
                                 footer: {
                                     text: "Version " + HorizonVer + " - " + message.author.username
                                 }
                             }}) }
                         }else{
-                            if (message.content == 'hg redeem') {
+                            if (message.content == '=redeem') {
                                 try {
                                     var data = db.getData("/game/" + message.author.id);
                                 } catch(error) {
@@ -524,7 +540,7 @@ module.exports = class Horigame extends Command {
                                     }
                                 }
                             }else{
-                if (message.content.startsWith('hg te ')) {
+                if (message.content.startsWith('=te ')) {
                     let args = message.content.split(' ');
                                 args.shift();
                                 let part1 = args.join(' ')
@@ -727,7 +743,7 @@ module.exports = class Horigame extends Command {
                                 console.log(err);
                             });
                 }else{
-                    if (message.content.startsWith('hg tf ')) {
+                    if (message.content.startsWith('=tf ')) {
                         let args = message.content.split(' ');
                                 args.shift();
                                 let part1 = args.join(' ')
@@ -930,7 +946,7 @@ module.exports = class Horigame extends Command {
                                 console.log(err);
                             });
                     }else{
-                        if (message.content.startsWith('hg tj ')) {
+                        if (message.content.startsWith('=tj ')) {
                             let args = message.content.split(' ');
                                 args.shift();
                                 let part1 = args.join(' ')
@@ -1133,7 +1149,7 @@ module.exports = class Horigame extends Command {
                                 console.log(err);
                             });
                         }else{
-                            if (message.content.startsWith('hg tl ')) {
+                            if (message.content.startsWith('=tl ')) {
                                 let args = message.content.split(' ');
                                 args.shift();
                                 let part1 = args.join(' ')
@@ -1335,73 +1351,73 @@ module.exports = class Horigame extends Command {
                                 }}) }
                                 console.log(err);
                             });
-                            }else if (message.content.startsWith('hg help')) {
-                                // if (speakEnglish(message.author)) { message.channel.send(":question: **What can we do with ~~Horizon~~ __Horigame__?**\n\nHelp looks like that:\n`hg [command] [required:type] (optional:type)`\n     Commands details\n     Required elements: `guild`\n\n__Help:__\n`hg shop (identifier:shopId)`\n     Used to buy an object on Plug² shop, or see what's on the shelf\n     Required elements: `guild`,`profile`\n\n`hg stats (null:null)`\n     Show your statistics\n     Required elements: `guild`,`profile`\n\n`hg give [identifier:giftId] [member:snowflake]`\n     Donate to a user\n     Required elements: `guild`,`profile`,`balance > 0`\n\n`hg t[language:1charlang] [text:string]`\n     Translate a text to another language (`f` for french, `e` for english, `j` for japanese, and `l` for latin)\n     Required elements: `guild`,`googleTranslateApi`\n\n`hg redeem (null:null)`\n     Redeem awaiting packages\n     Required elements: `guild`,`profile`,`redeemablePacks > 0`\n\n`hg help (null:null)`\n     Show this help message\n     Required elements: `guild`\n\n`hg reset (*)`\n     Reset your profile\n     Required profile: `guild`,`profile`\n\n`hg init (null:null)`\n     Initialize your profile\n     Required elements: `guild`,`noProfile`\n\n`hg push [channel:pushchannel]`\n     Alter notifications settings\n     Required elements: `guild`,`profile`\n\n`hg fr (null:null)`\n     Sets your personal language to french\n     Required elements: `guild`,`profile`\n\n`hg en (null:null)`\n     Sets your personal language to english\n    Required elements: `guild`,`profile`") } else { message.channel.send(":question: **Que pouvons nous donc faire avec ~~Horizon~~ __Horigame__ ?**\n\nL'aide sera présentée ainsi :\n`hg [commande] [obligatoire:type] (facultatif:type)`\n     Détails de la commande\n     Éléments requis : `guild`\n\n__Aide :__\n`hg shop (identifiant:shopId)`\n     Permet d'acheter un objet dans la boutique Plug², ou de consulter les stocks\n     Éléments requis : `guild`,`profile`\n\n`hg stats (null:null)`\n     Affiche vos statistiques\n     Éléments requis : `guild`,`profile`\n\n`hg give [identifiant:giftId] [utilisateur:snowflake]`\n     Fait un don à un autre utilisateur\n     Éléments requis : `guild`,`profile`,`balance > 0`\n\n`hg t[langue:1charlang] [texte:string]`\n     Traduit un texte en une langue (`f` pour français, `e` pour anglais, `j` pour japonais, et `l` pour latin)\n     Éléments requis : `guild`,`googleTranslateApi`\n\n`hg redeem (null:null)`\n     Récupère les lots en attente\n     Éléments requis : `guild`,`profile`,`redeemablePacks > 0`\n\n`hg help (null:null)`\n     Affiche ce message d'aide\n     Éléments requis : `guild`\n\n`hg reset (*)`\n     Réinitialise votre profil\n     Éléments requis : `guild`,`profile`\n\n`hg init (null:null)`\n     Initialise votre profil utilisateur\n     Éléments requis : `guild`,`noProfile`\n\n`hg push [canal:pushchannel]`\n     Altère les préférences de notification\n     Éléments requis : `guild`,`profile`\n\n`hg fr (null:null)`\n     Définit votre langue personnelle sur le français\n     Éléments requis : `guild`,`profile`\n\n`hg en (null:null)`\n     Définit votre langue personnelle sur l'anglais\n     Éléments requis : `guild`,`profile`") }
+                            }else if (message.content.startsWith('=help')) {
+                                // if (speakEnglish(message.author)) { message.channel.send(":question: **What can we do with ~~Horizon~~ __Horigame__?**\n\nHelp looks like that:\n`=[command] [required:type] (optional:type)`\n     Commands details\n     Required elements: `guild`\n\n__Help:__\n`=shop (identifier:shopId)`\n     Used to buy an object on Plug² shop, or see what's on the shelf\n     Required elements: `guild`,`profile`\n\n`=stats (null:null)`\n     Show your statistics\n     Required elements: `guild`,`profile`\n\n`=give [identifier:giftId] [member:snowflake]`\n     Donate to a user\n     Required elements: `guild`,`profile`,`balance > 0`\n\n`=t[language:1charlang] [text:string]`\n     Translate a text to another language (`f` for french, `e` for english, `j` for japanese, and `l` for latin)\n     Required elements: `guild`,`googleTranslateApi`\n\n`=redeem (null:null)`\n     Redeem awaiting packages\n     Required elements: `guild`,`profile`,`redeemablePacks > 0`\n\n`=help (null:null)`\n     Show this help message\n     Required elements: `guild`\n\n`=reset (*)`\n     Reset your profile\n     Required profile: `guild`,`profile`\n\n`=init (null:null)`\n     Initialize your profile\n     Required elements: `guild`,`noProfile`\n\n`=push [channel:pushchannel]`\n     Alter notifications settings\n     Required elements: `guild`,`profile`\n\n`=fr (null:null)`\n     Sets your personal language to french\n     Required elements: `guild`,`profile`\n\n`=en (null:null)`\n     Sets your personal language to english\n    Required elements: `guild`,`profile`") } else { message.channel.send(":question: **Que pouvons nous donc faire avec ~~Horizon~~ __Horigame__ ?**\n\nL'aide sera présentée ainsi :\n`=[commande] [obligatoire:type] (facultatif:type)`\n     Détails de la commande\n     Éléments requis : `guild`\n\n__Aide :__\n`=shop (identifiant:shopId)`\n     Permet d'acheter un objet dans la boutique Plug², ou de consulter les stocks\n     Éléments requis : `guild`,`profile`\n\n`=stats (null:null)`\n     Affiche vos statistiques\n     Éléments requis : `guild`,`profile`\n\n`=give [identifiant:giftId] [utilisateur:snowflake]`\n     Fait un don à un autre utilisateur\n     Éléments requis : `guild`,`profile`,`balance > 0`\n\n`=t[langue:1charlang] [texte:string]`\n     Traduit un texte en une langue (`f` pour français, `e` pour anglais, `j` pour japonais, et `l` pour latin)\n     Éléments requis : `guild`,`googleTranslateApi`\n\n`=redeem (null:null)`\n     Récupère les lots en attente\n     Éléments requis : `guild`,`profile`,`redeemablePacks > 0`\n\n`=help (null:null)`\n     Affiche ce message d'aide\n     Éléments requis : `guild`\n\n`=reset (*)`\n     Réinitialise votre profil\n     Éléments requis : `guild`,`profile`\n\n`=init (null:null)`\n     Initialise votre profil utilisateur\n     Éléments requis : `guild`,`noProfile`\n\n`=push [canal:pushchannel]`\n     Altère les préférences de notification\n     Éléments requis : `guild`,`profile`\n\n`=fr (null:null)`\n     Définit votre langue personnelle sur le français\n     Éléments requis : `guild`,`profile`\n\n`=en (null:null)`\n     Définit votre langue personnelle sur l'anglais\n     Éléments requis : `guild`,`profile`") }
                                 if (speakEnglish(message.author)) { message.channel.send({embed: {
                                     // color: 0x33cc33,
                                     author: {
                                         name: "Hello there, I'm Horizon!"
                                     },
                                     title: "I'd like to teach you about Horigame!",
-                                    description: "Horigame is a level-reward game were you can buy great perks with the money you get each level you up.\nEach command starts with `hg`!\n\nBut let's see the list of commands!",
+                                    description: "Horigame is a level-reward game were you can buy great perks with the money you get each level you up.\nEach command starts with `=`!\n\nBut let's see the list of commands!",
                                     fields: [{
-                                        name: "hg shop",
+                                        name: "=shop",
                                         value: "Opens the shop, were you can buy great perks\n\n**Optional: ** `item` : The ID of the item you want to buy"
                                     },
                                     {
-                                        name: "hg stats",
+                                        name: "=stats",
                                         value: "Show your stats (XP, inventory, and so on)\n\n**No Arguments Expected**"
                                     },
                                     {
-                                        name: "hg give",
+                                        name: "=give",
                                         value: "Give a resource from your inventory to the inventory of someone else\n\n**Required: ** `item` : The ID of the item you want to give\n**Required: ** `member` : The @-ing for the user you want to give to"
                                     },
                                     {
-                                        name: "hg tf",
+                                        name: "=tf",
                                         value: "Translate a text to French\n\n**Required: ** `text` : The text to translate to French"
                                     },
                                     {
-                                        name: "hg te",
+                                        name: "=te",
                                         value: "Translate a text to English\n\n**Required: ** `text` : The text to translate to English"
                                     },
                                     {
-                                        name: "hg tj",
+                                        name: "=tj",
                                         value: "Translate a text to Japanese\n\n**Required: ** `text` : The text to translate to Japanese"
                                     },
                                     {
-                                        name: "hg tl",
+                                        name: "=tl",
                                         value: "Translate a text to Latin\n\n**Required: ** `text` : The text to translate to Latin"
                                     },
                                     {
-                                        name: "hg redeem",
+                                        name: "=redeem",
                                         value: "Redeem all received packages\n\n*No Arguments Expected*"
                                     },
                                     {
-                                        name: "hg help",
+                                        name: "=help",
                                         value: "Show this help message\n\n*No Arguments Expected*"
                                     },
                                     {
-                                        name: "hg info",
+                                        name: "=info",
                                         value: "Show info about Horizon\n\n*No Arguments Expected*"
                                     },
                                     {
-                                        name: "hg reset",
+                                        name: "=reset",
                                         value: "Reset your profile to factory defaults\n\n*No Arguments Expected*"
                                     },
                                     {
-                                        name: "hg init",
+                                        name: "=init",
                                         value: "Create your profile\n\n*No Arguments Expected*"
                                     },
                                     {
-                                        name: "hg push",
+                                        name: "=push",
                                         value: "Manage notifications settings\n\n**Required: ** `notifications_channel` : The notifications channel to configure"
                                     },
                                     {
-                                        name: "hg fr",
+                                        name: "=fr",
                                         value: "Sets your personal language to French\n\n*No Arguments Expected*"
                                     },
                                     {
-                                        name: "hg en",
+                                        name: "=en",
                                         value: "Sets your personal language to English\n\n*No Arguments Expected*"
                                     }],
                                     footer: {
@@ -1413,72 +1429,72 @@ module.exports = class Horigame extends Command {
                                             name: "Coucou tout le monde, moi c'est Horizon !"
                                         },
                                         title: "Je suis là pour vous apprendre à utiliser Horigame !",
-                                        description: "Horigame est un jeu de financement participatif virtuel où vous pouvez acheter des effets cool sur le serveur avec l'argent que vous gagnez à chaque montée de niveau.\nToutes les commandes commencent par `hg` !\n\nMais, voyons-en la liste :",
+                                        description: "Horigame est un jeu de financement participatif virtuel où vous pouvez acheter des effets cool sur le serveur avec l'argent que vous gagnez à chaque montée de niveau.\nToutes les commandes commencent par `=` !\n\nMais, voyons-en la liste :",
                                         fields: [{
-                                            name: "hg shop",
+                                            name: "=shop",
                                             value: "Ouvre le magasin, dans lequel vous pouvez ajouter des effets cool\n\n**Optionnel : ** `element` : L'identifiant de l'élément que vous souhaitez acheter"
                                         },
                                         {
-                                            name: "hg stats",
+                                            name: "=stats",
                                             value: "Affiche vos statistiques (expérience, inventaire, et bien plus)\n\n**Aucun argument attendu**"
                                         },
                                         {
-                                            name: "hg give",
+                                            name: "=give",
                                             value: "Donne une ressource de votre inventaire à celui de l'inventaire de quelqu'un d'autre\n\n**Requis : ** `element` : L'identifiant de l'élément que vous voulez donner\n**Requis : ** `membre` : La mention de l'utilisateur à qui donner la ressource"
                                         },
                                         {
-                                            name: "hg tf",
+                                            name: "=tf",
                                             value: "Traduit un texte en français\n\n**Requis : ** `texte` : Le texte à traduire en français"
                                         },
                                         {
-                                            name: "hg te",
+                                            name: "=te",
                                             value: "Traduit un texte en anglais\n\n**Requis : ** `texte` : Le texte à traduire en anglais"
                                         },
                                         {
-                                            name: "hg tj",
+                                            name: "=tj",
                                             value: "Traduit un texte en japonais\n\n**Requis : ** `texte` : Le texte à traduire en japonais"
                                         },
                                         {
-                                            name: "hg tl",
+                                            name: "=tl",
                                             value: "Traduit un texte en latin\n\n**Requis : ** `texte` : Le texte à traduire en latin"
                                         },
                                         {
-                                            name: "hg redeem",
+                                            name: "=redeem",
                                             value: "Récupérer tous les paquets reçus\n\n*Aucun argument attendu*"
                                         },
                                         {
-                                            name: "hg help",
+                                            name: "=help",
                                             value: "Affiche ce message d'aide\n\n*Aucun argument attendu*"
                                         },
                                         {
-                                            name: "hg info",
+                                            name: "=info",
                                             value: "Affiche des informations concernant Horizon\n\n*Aucun argument attendu*"
                                         },
                                         {
-                                            name: "hg reset",
+                                            name: "=reset",
                                             value: "Réinitialise votre profil aux valeurs d'usine\n\n*Aucun argument attendu*"
                                         },
                                         {
-                                            name: "hg init",
+                                            name: "=init",
                                             value: "Initialise votre profil\n\n*Aucun argument attendu*"
                                         },
                                         {
-                                            name: "hg push",
+                                            name: "=push",
                                             value: "Gérer les notifications\n\n**Requis : ** `canal_de_notifications` : Le canal de notifications à configurer"
                                         },
                                         {
-                                            name: "hg fr",
+                                            name: "=fr",
                                             value: "Définir votre langue personnelle sur français\n\n*Aucun argument attendu*"
                                         },
                                         {
-                                            name: "hg en",
+                                            name: "=en",
                                             value: "Définir votre langue personnelle sur anglais\n\n*Aucun argument attendu*"
                                         }],
                                         footer: {
                                             text: "Version " + HorizonVer + " - " + message.author.username
                                         }
                                 }}) }
-                            }else if (message.content.startsWith('hg push')) {
+                            }else if (message.content.startsWith('=push')) {
                                 try {
                                     var data = db.getData("/game/" + message.author.id);
                                 } catch(error) {
@@ -1486,7 +1502,7 @@ module.exports = class Horigame extends Command {
                                     initErr();
                                 };
                                 if (data) {
-                                if (message.content == "hg push levels") {
+                                if (message.content == "=push levels") {
                                     try {
                                         var pushLevels = uconf.getData("/push/" + message.author.id + "/levels")
                                     } catch(err) {
@@ -1540,7 +1556,7 @@ module.exports = class Horigame extends Command {
                                             }
                                         }}) }
                                     }
-                                } else if (message.content == "hg push gifts") {
+                                } else if (message.content == "=push gifts") {
                                     try {
                                         var pushLevels = uconf.getData("/push/" + message.author.id + "/gifts")
                                     } catch(err) {
@@ -1594,15 +1610,15 @@ module.exports = class Horigame extends Command {
                                             }
                                         }}) }
                                     }
-                                } else if (message.content == "hg push") {
-                                    // if (speakEnglish(message.author)) { message.channel.send("**`hg push` can be used to manage Horigame's notification settings by specific channels.**\n\n**Note:** Horigame's notification are sent on direct messages.\n\n__**Available notification channels:**__\n`levels` - Notifications when you pass a level\n`gifts` - Notifications when you recieve gifts\n\nUse `hg push [channel]` to alter configuration.") } else { message.channel.send("**`hg push` vous permet de gérer vos paramètres de notification de Horigame pour des canaux particuliers.**\n\n**Note :** Les notifications de Horigame vous sont envoyées par messages privés.\n\n__**Canaux de notification disponibles :**__\n`levels` - Messages lorsque vous passez un niveau\n`gifts` - Messages lorsque vous recevez des lots en cadeau.\n\nUtilisez `hg push [canal]` pour altérer la configuration.") }
+                                } else if (message.content == "=push") {
+                                    // if (speakEnglish(message.author)) { message.channel.send("**`=push` can be used to manage Horigame's notification settings by specific channels.**\n\n**Note:** Horigame's notification are sent on direct messages.\n\n__**Available notification channels:**__\n`levels` - Notifications when you pass a level\n`gifts` - Notifications when you recieve gifts\n\nUse `=push [channel]` to alter configuration.") } else { message.channel.send("**`=push` vous permet de gérer vos paramètres de notification de Horigame pour des canaux particuliers.**\n\n**Note :** Les notifications de Horigame vous sont envoyées par messages privés.\n\n__**Canaux de notification disponibles :**__\n`levels` - Messages lorsque vous passez un niveau\n`gifts` - Messages lorsque vous recevez des lots en cadeau.\n\nUtilisez `=push [canal]` pour altérer la configuration.") }
                                     if (speakEnglish(message.author)) { message.channel.send({embed: {
                                         color: 0x33cc33,
                                         author: {
                                             name: "Horigame"
                                         },
-                                        title: "`hg push`",
-                                        description: "Manage Horigame notifications\n**Usage: ** `hg push <channel>`\n\n**Channels List:**",
+                                        title: "`=push`",
+                                        description: "Manage Horigame notifications\n**Usage: ** `=push <channel>`\n\n**Channels List:**",
                                         fields: [{
                                             name: "gifts",
                                             value: "Notifications when you receive a gift"
@@ -1619,8 +1635,8 @@ module.exports = class Horigame extends Command {
                                         author: {
                                             name: "Horigame"
                                         },
-                                        title: "`hg push`",
-                                        description: "Gérez les notifications de Horigame\n**Utilisation : ** `hg canal <channel>`\n\n**Liste des canaux :**",
+                                        title: "`=push`",
+                                        description: "Gérez les notifications de Horigame\n**Utilisation : ** `=canal <channel>`\n\n**Liste des canaux :**",
                                         fields: [{
                                             name: "gifts",
                                             value: "Notifications when you receive a gift"
@@ -1650,7 +1666,7 @@ module.exports = class Horigame extends Command {
                                         description: ":no_entry: The " + text + " notification channel cannot be found.",
                                         fields: [{
                                             name: "Get Help",
-                                            value: "Enter the `hg push` command to see list of all notification channels"
+                                            value: "Enter the `=push` command to see list of all notification channels"
                                         }],
                                         footer: {
                                             text: "Version " + HorizonVer + " - " + message.author.username
@@ -1664,20 +1680,105 @@ module.exports = class Horigame extends Command {
                                         description: ":no_entry: Le canal de notifications " + text + " ne peut pas être trouvé.",
                                         fields: [{
                                             name: "Obtenez de l'aide",
-                                            value: "Entrez la commande `hg push` pour obtenir la liste des canaux de notification"
+                                            value: "Entrez la commande `=push` pour obtenir la liste des canaux de notification"
                                         }],
                                         footer: {
                                             text: "Version " + HorizonVer + " - " + message.author.username
                                         }
                                     }}) }
                                 }}
-                            }else if (message.content.startsWith('hg manga')) {
-                                if (message.author.id == "294910706250285056") {
-
+                            }else if (message.content.startsWith('=ping')) {
+                                if (ping < 150) {
+                                    var color = 0x33cc33
+                                } else if (ping < 300) {
+                                    var color = 0xffcc00
                                 } else {
-                                    if (speakEnglish(message.author)) { message.channel.send(':no_entry_sign: Actually, only **Minteck** can use the `hg manga` command.') } else { message.channel.send(':no_entry_sign: Actuellement, seul **Minteck** peut utiliser la commande `hg manga`') }
+                                    var color = 0xff0000
                                 }
-                            }else if (message.content.startsWith('hg fr')) {
+                                if (speakEnglish(message.author)) {
+                                    message.channel.send({embed: {
+                                        color: color,
+                                        author: {
+                                            name: "Horigame"
+                                        },
+                                        title: "Ping",
+                                        description: "Pong! It took " + Math.round(ping) + " milliseconds!",
+                                        footer: {
+                                            text: "Version " + HorizonVer + " - " + message.author.username
+                                        }
+                                    }})
+                                } else {
+                                    message.channel.send({embed: {
+                                        color: color,
+                                        author: {
+                                            name: "Horigame"
+                                        },
+                                        title: "Latences",
+                                        description: "Pong ! Je vous ai répondu en " + Math.round(ping) + " millisecondes !",
+                                        footer: {
+                                            text: "Version " + HorizonVer + " - " + message.author.username
+                                        }
+                                    }})
+                                }
+                            }else if (message.content.startsWith('=invite')) {
+                                if (speakEnglish(message.author)) {
+                                    try {
+                                        let guild = client.guilds.get('408345017070125076');
+                                        let channel = guild.channels.get('408345017070125078');
+                                        channel.fetchMessages({ limit: 1 }).then(messages => {
+                                            let lastMessaget1 = messages.first();
+                                          
+                                            lstmsgpx = lastMessaget1.content
+                                          })
+                                    } catch (err) {
+                                        lstmsgpx = "*(unable to get last message : " + err.toString() + ")*";
+                                    }
+                                    message.channel.send("https://discordapp.com/invite/rYPqfUg")
+                                    message.channel.send({embed: {
+                                        color: 0x33cc33,
+                                        author: {
+                                            name: "Horigame"
+                                        },
+                                        title: "Join Minteck's server",
+                                        description: "Join the Minteck's server to see latest Horizon changes",
+                                        fields: [{
+                                            name: "Latest message in #global channel",
+                                            value: lstmsgpx
+                                        }],
+                                        footer: {
+                                            text: "Version " + HorizonVer + " - " + message.author.username
+                                        }
+                                    }})
+                                } else {
+                                    try {
+                                        let guild = client.guilds.get('408345017070125076');
+                                        let channel = guild.channels.get('408345017070125078');
+                                        channel.fetchMessages({ limit: 1 }).then(messages => {
+                                            let lastMessaget1 = messages.first();
+                                          
+                                            lstmsgpx = lastMessaget1.content
+                                          })
+                                    } catch (err) {
+                                        lstmsgpx = "*(impossible de récupérer le dernier message envoyé : " + err.toString() + ")*";
+                                    }
+                                    message.channel.send("https://discordapp.com/invite/rYPqfUg")
+                                    message.channel.send({embed: {
+                                        color: 0x33cc33,
+                                        author: {
+                                            name: "Horigame"
+                                        },
+                                        title: "Rejoindre le serveur de Minteck",
+                                        description: "Rejoignez le serveur de Minteck pour être au courant des dernières nouveautés sur Horizon",
+                                        fields: [{
+                                            name: "Dernier message envoyé dans le salon #global",
+                                            value: lstmsgpx
+                                        }],
+                                        footer: {
+                                            text: "Version " + HorizonVer + " - " + message.author.username
+                                        }
+                                    }})
+                                }
+                            }else if (message.content.startsWith('=fr')) {
                                 uconf.push('/lang/' + message.author.id, 'fr')
                                 message.channel.send({embed: {
                                     color: 0x33cc33,
@@ -1690,7 +1791,7 @@ module.exports = class Horigame extends Command {
                                         text: "Version " + HorizonVer + " - " + message.author.username
                                     }
                                 }})
-                            }else if (message.content.startsWith('hg en')) {
+                            }else if (message.content.startsWith('=en')) {
                                 uconf.push('/lang/' + message.author.id, 'en')
                                 message.channel.send({embed: {
                                     color: 0x33cc33,
@@ -1705,9 +1806,9 @@ module.exports = class Horigame extends Command {
                                 }})
                             }else{
             // if (speakEnglish(message.author)) { message.channel.send(":no_entry_sign: **" + message.content + "** isn't recognized as an Horigame internal command. Check spelling and retry. - `" + message.author.username + "`") } else { message.channel.send(":no_entry_sign: **" + message.content + "** n'est pas reconnu en tant que commande interne de Horigame. Vérifiez l'orthographe et réessayez. - `" + message.author.username + "`") }
-            if (message.content.startsWith("hg pinpages")) {
+            if (message.content.startsWith("=pinpages")) {
                 pinpages(message)
-        } else if (message.content.startsWith("hg info")) {
+        } else if (message.content.startsWith("=info")) {
             if (speakEnglish(message.author)) { message.channel.send({embed: {
                 author: {
                     name: "Horigame"
@@ -1716,7 +1817,7 @@ module.exports = class Horigame extends Command {
                 description: "Horizon is a Discord bot made by two students on their free time.",
                 fields: [{
                     name: "Versions",
-                    value: "Horizon Version: " + HorizonVer + "\nlibhorizon Version: " + LibhorizonVer + "\nHorigame Version: " + HorigameVer + "\nNode Version: " + process.version.replace("v","")
+                    value: "Horizon Version: " + HorizonVer + "\nlibhorizon Version: " + LibhorizonVer + "\nHorigame Version: " + HorigameVer + "\nSupport Bot Version: " + SupportVer + "\nNode Version: " + process.version.replace("v","")
                 },
                 {
                     name: "Credits",
@@ -1733,7 +1834,7 @@ module.exports = class Horigame extends Command {
                 description: "Horizon est un bot Discord créé par deux étudiants sur leur temps libre.",
                 fields: [{
                     name: "Versions",
-                    value: "Version d'Horizon : " + HorizonVer + "\nVersion de libhorizon : " + LibhorizonVer + "\nVersion d'Horigame: " + HorigameVer + "\nVersion de Node: " + process.version.replace("v","")
+                    value: "Version d'Horizon : " + HorizonVer + "\nVersion de libhorizon : " + LibhorizonVer + "\nVersion d'Horigame: " + HorigameVer + "\nSupport Bot Version: " + SupportVer + "\nVersion de Node: " + process.version.replace("v","")
                 },
                 {
                     name: "Crédits",
@@ -1754,7 +1855,7 @@ module.exports = class Horigame extends Command {
                     text: "Version " + HorizonVer + " - " + message.author.username
                 }
             }}) } else {
-                if (message.content.startsWith("hg pinpages")) {
+                if (message.content.startsWith("=pinpages")) {
                     pinpages(message)
             } else { message.channel.send({embed: {
                 color: 0xff0000,
@@ -1791,7 +1892,7 @@ if (data) {
         try { var setting = uconf.getData("/push/" + message.author.id + "/levels") } catch(err) { var setting = true }
         // if (setting == true) { if (speakEnglish(message.author)) { message.author.send(":tools: Hi **" + message.author.username + "**, you're now on **level " + userLevel + "**, congratulations! *(and you won 15 wooden planks)*") } else { message.author.send(":tools: Salut **" + message.author.username + "**, tu es maintenant au **niveau " + userLevel + "**, félicitations ! *(et tu gagne 15 planches de bois)*") } }
         if (setting == true) {
-            if (speakEnglish(message.author)) { message.channel.send({embed: {
+            if (speakEnglish(message.author)) { message.author.send({embed: {
                 color: 0x33cc33,
                 author: {
                     name: "Horigame"
@@ -1801,7 +1902,7 @@ if (data) {
                 footer: {
                     text: "Version " + HorizonVer + " - " + message.author.username
                 }
-            }}) } else { message.channel.send({embed: {
+            }}) } else { message.author.send({embed: {
                 color: 0x33cc33,
                 author: {
                     name: "Horigame"
@@ -1814,7 +1915,7 @@ if (data) {
             }}) }
         }
     }
-}}}}}
+}}}}
 
 function blockXpUp () {
     //Ne rien faire, juste empêcher l'utilisateur de gagner de l'expérience...
@@ -1898,7 +1999,7 @@ function initUser() {
                     description: ":white_check_mark: Et voilà ! Vous pouvez commencer à jouer",
                     fields: [{
                         name: "Pour bien démarrer",
-                        value: "N'hésitez pas à faire la commande `hg help` pour obtenir toutes les informations dont vous avez besoin !\nQue la chasse à l'expérience, commence !"
+                        value: "N'hésitez pas à faire la commande `=help` pour obtenir toutes les informations dont vous avez besoin !\nQue la chasse à l'expérience, commence !"
                     }],
                     footer: {
                         text: "Version " + HorizonVer + " - " + message.author.username
@@ -2249,14 +2350,14 @@ function checkGift() {
                     text: "Version " + HorizonVer + " - " + message.author.username
                 }
             }}) }
-            // if (setting === true) { if (speakEnglish(message.mentions.users.first())) { message.mentions.users.first().send("🔔 You just received **10 wooden planks** from **" + message.author.username + "**. Use the `hg redeem` to redeem that...") } else { message.mentions.users.first().send("🔔 Vous avez reçu un pack de **10 planches de bois** de la part de **" + message.author.username + "**. Utilisez la commande `hg redeem` pour les récupérer...") } }
+            // if (setting === true) { if (speakEnglish(message.mentions.users.first())) { message.mentions.users.first().send("🔔 You just received **10 wooden planks** from **" + message.author.username + "**. Use the `=redeem` to redeem that...") } else { message.mentions.users.first().send("🔔 Vous avez reçu un pack de **10 planches de bois** de la part de **" + message.author.username + "**. Utilisez la commande `=redeem` pour les récupérer...") } }
             if (setting === true) { if (speakEnglish(message.mentions.users.first())) { message.mentions.users.first().send({embed: {
-                description: "🔔 You recevied a pack of **10 wooden planks** from **" + message.author.username + "**.\nUse `hg redeem` to redeem that...",
+                description: "🔔 You recevied a pack of **10 wooden planks** from **" + message.author.username + "**.\nUse `=redeem` to redeem that...",
                 footer: {
                     text: "Version " + HorizonVer + " - " + message.author.username
                 }
             }}) } else { message.mentions.users.first().send({embed: {
-                description: "🔔 Vous avez reçu un paquet de **10 planches de bois** de la part de **" + message.author.username + "**.\nUtilisez `hg redeem` pour les récupérer...",
+                description: "🔔 Vous avez reçu un paquet de **10 planches de bois** de la part de **" + message.author.username + "**.\nUtilisez `=redeem` pour les récupérer...",
                 footer: {
                     text: "Version " + HorizonVer + " - " + message.author.username
                 }
@@ -2317,12 +2418,12 @@ function checkGift() {
                     }
                 }}) }
                 if (setting === true) { if (speakEnglish(message.mentions.user.first())) { message.mentions.users.first().send({embed: {
-                description: "🔔 You recevied a pack of **10 wooden planks** from **" + message.author.username + "**.\nUse `hg redeem` to redeem that...",
+                description: "🔔 You recevied a pack of **10 wooden planks** from **" + message.author.username + "**.\nUse `=redeem` to redeem that...",
                 footer: {
                     text: "Version " + HorizonVer + " - " + message.author.username
                 }
             }}) } else { message.mentions.users.first().send({embed: {
-                description: "🔔 Vous avez reçu un paquet de **10 planches de bois** de la part de **" + message.author.username + "**.\nUtilisez `hg redeem` pour les récupérer...",
+                description: "🔔 Vous avez reçu un paquet de **10 planches de bois** de la part de **" + message.author.username + "**.\nUtilisez `=redeem` pour les récupérer...",
                 footer: {
                     text: "Version " + HorizonVer + " - " + message.author.username
                 }
@@ -2384,12 +2485,12 @@ function checkGift() {
                     }
                 }}) }
                 if (setting === true) { if (speakEnglish(message.mentions.user.first())) { message.mentions.users.first().send({embed: {
-                    description: "🔔 You recevied a pack of **10 gold nuggets** from **" + message.author.username + "**.\nUse `hg redeem` to redeem that...",
+                    description: "🔔 You recevied a pack of **10 gold nuggets** from **" + message.author.username + "**.\nUse `=redeem` to redeem that...",
                     footer: {
                         text: "Version " + HorizonVer + " - " + message.author.username
                     }
                 }}) } else { message.mentions.users.first().send({embed: {
-                    description: "🔔 Vous avez reçu un paquet de **10 pépites d'or** de la part de **" + message.author.username + "**.\nUtilisez `hg redeem` pour les récupérer...",
+                    description: "🔔 Vous avez reçu un paquet de **10 pépites d'or** de la part de **" + message.author.username + "**.\nUtilisez `=redeem` pour les récupérer...",
                     footer: {
                         text: "Version " + HorizonVer + " - " + message.author.username
                     }
@@ -2453,12 +2554,12 @@ function checkGift() {
             }}) }
             try { var setting = db.getData('/game/' + message.mentions.users.first().id + '/push/gifts') } catch(err) { var setting = true }
             if (setting === true) { if (speakEnglish(message.mentions.user.first())) { message.mentions.users.first().send({embed: {
-                description: "🔔 You recevied a pack of **10 XP points** from **" + message.author.username + "**.\nUse `hg redeem` to redeem that...",
+                description: "🔔 You recevied a pack of **10 XP points** from **" + message.author.username + "**.\nUse `=redeem` to redeem that...",
                 footer: {
                     text: "Version " + HorizonVer + " - " + message.author.username
                 }
             }}) } else { message.mentions.users.first().send({embed: {
-                description: "🔔 Vous avez reçu un paquet de **10 points d'expérience** de la part de **" + message.author.username + "**.\nUtilisez `hg redeem` pour les récupérer...",
+                description: "🔔 Vous avez reçu un paquet de **10 points d'expérience** de la part de **" + message.author.username + "**.\nUtilisez `=redeem` pour les récupérer...",
                 footer: {
                     text: "Version " + HorizonVer + " - " + message.author.username
                 }
@@ -2631,7 +2732,7 @@ function showLog() {
 }}
 
 function pinpages(message) {
-    if (message.content == "hg pinpages") {
+    if (message.content == "=pinpages") {
         if (speakEnglish(message.author)) { message.channel.send({embed: {
             color: 0xbc3af1,
             author: {
@@ -2653,7 +2754,7 @@ function pinpages(message) {
                 text: "Horizon Version " + HorizonVer + " - " + message.author.username
             }
         }}) }
-    } else if (message.contents.startsWith("hg pinpages ")) {
-        command = message.content.replace("hg pinpages ","")
+    } else if (message.contents.startsWith("=pinpages ")) {
+        command = message.content.replace("=pinpages ","")
     }
 }

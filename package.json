@@ -5,6 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "@vitalets/google-translate-api": "^2.7.0",
+    "dialogflow": "^0.10.2",
     "discord.js": "^11.4.2",
     "ffmpeg-binaries": "^4.0.0",
     "gitlab": "^4.3.0",

@@ -5,16 +5,13 @@
 // |  _  | (_) | |  | |/ / (_) | | | |
 // |_| |_|\___/|_|  |_/___\___/|_| |_|
 //
-// Horizon Discord Bot version 1.5
-//
 // Créé par Horizon et Minteck
 // Copyright (c) 2019, Horizon
 //
 // Horizon est distribué sous licence Minteck Projects PLA 1.0.
-// Pour en savoir plus, vous pouvez accéder à ce site Internet :
-//    http://projectpedia.referata.com/wiki/Licence:Minteck_Projects_PLA
 
 //const underscorelib = require('underscore');
+process.env.GOOGLE_APPLICATION_CREDENTIALS = __dirname + "/config/SupportMinteckProjects-36876da72343.json"
 const Discord = require('discord.js');
 const os = require('os');
 const fs = require('fs');

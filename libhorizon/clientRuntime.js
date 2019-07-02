@@ -18,9 +18,11 @@ let processram
 const talkedRecently = new Set();
 let lstmsg
 
-global.HorizonVer = "1.12.1"
-global.LibhorizonVer = "0.9"
-global.HorigameVer = "1.3"
+global.HorizonVer = "1.13"
+global.LibhorizonVer = "1.0-beta-multiserv"
+global.LibhorizonVerShort = "1.0"
+global.HorigameVer = "1.4"
+global.SupportVer = "0.0.1"
 
 let parsed0
 let parsed1
@@ -42,6 +44,7 @@ const TestMode = require('../features/testMode')
 const RestartBot = require('../features/restartBot')
 const SendLogs = require('../features/sendLogs')
 const SendCrashes = require('../features/sendCrashes')
+const SupportBot = require('../features/supportBot')
 const EmbedExplain = require('../features/embedExplain')
 const VoiceChannel = require('../features/voiceChannel')
 //const Projectpedia = require('../features/projectpediaIntegration')
@@ -49,7 +52,7 @@ const Horigame = require('../horigame/source')
 
 client.on('message', function (message) {
     if (maintenance === false) {
-    let commandUsed = Horigame.parse(message)
+    let commandUsed = Horigame.parse(message,client.ping)
 }});
 
 client.on('message', function (message) {
@@ -74,6 +77,7 @@ client.on('message', function (message) {
 }});
 
 client.on('message', function (message) {
+    SupportBot.check(message)
     if (maintenance === false) {
     if (message.content.startsWith(config.commandsPrefix)) {
     if (talkedRecently.has(message.author.id)) {
@@ -210,7 +214,7 @@ Object.defineProperty(global, '__stack', {
 function showLog() {
         if (config.keepLogs == true) {
         var date = new Date();
-        var hour = date.getHours() + 1;
+        var hour = date.getHours();
         hour = (hour < 10 ? "0" : "") + hour;
         var min  = date.getMinutes();
         min = (min < 10 ? "0" : "") + min;
@@ -290,7 +294,7 @@ function dga2() {
 
 function dga3() {
     //client.user.setActivity(HorizonVer + " - libhorizon " + LibhorizonVer);
-    if (maintenance === false) client.user.setPresence({ game: { name: HorizonVer + ' - libhorizon ' + LibhorizonVer, details: 'Je suis en version ' + HorizonVer + ' !' }, status: 'online', "game.type": "LISTENING" })
+    if (maintenance === false) client.user.setPresence({ game: { name: HorizonVer + '-' + LibhorizonVerShort + '-' + HorigameVer + '-' + SupportVer, details: 'Je suis en version ' + HorizonVer + ' !' }, status: 'online', "game.type": "LISTENING" })
 	setTimeout(dga4, 10000);
 }
 
@@ -308,13 +312,13 @@ function dga5() {
 
 function dga6() {
     //client.user.setActivity("#Plug²4Ever")
-    if (maintenance === false) client.user.setPresence({ game: { name: '#Plug²4Ever', details: 'Je serai toujours sur ce serveur !' }, status: 'online', "game.type": "WATCHING"  })
+    if (maintenance === false) client.user.setPresence({ game: { name: '#PlugX4Ever', details: 'Je serai toujours sur ce serveur !' }, status: 'online', "game.type": "WATCHING"  })
 	setTimeout(dga7, 10000);
 }
 
 function dga7() {
     //client.user.setActivity("hg init")
-    if (maintenance === false) client.user.setPresence({ game: { name: 'Essayez \'hg help\'', details: 'Commencez à jouer...' }, status: 'online', "game.type": "PLAYING" })
+    if (maintenance === false) client.user.setPresence({ game: { name: 'Essayez \'=help\'', details: 'Commencez à jouer...' }, status: 'online', "game.type": "PLAYING" })
 	setTimeout(dga1, 10000);
 }
 
@@ -408,7 +412,7 @@ client.on('reconnecting', function () {
 });
 
 client.on('error', function (err) {
-    loginfo = "Erreur inconnue : " + err
+    loginfo = "Erreur inconnue : " + err.toString()
     showLog();
 });
 
